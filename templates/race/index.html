@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{%block content%}
+
+
+
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3" hidden=true>
+                    Id
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Round
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Date
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in body %}
+            <tr class="bg-white hover:bg-gray-50" onclick="window.location.href='/race/{{request.TLPOST.year}}/{{data.raceNo}}/';">
+                <th scope="row" class="px-6 py-4" hidden=true>
+                    {{data.id}}
+                </th>
+                <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                    {{data.raceNo}}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {{data.fullName}}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {{data.raceDate}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+ 
+
+{%endblock%}

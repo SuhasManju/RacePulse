@@ -1,0 +1,46 @@
+{% load static %}
+
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}F1Info{% endblock %}</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- hyperscript -->
+    <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
+
+
+    <!-- HTMX -->
+    <script src={% static "htmx.min.js" %}></script>
+
+    <!-- FlowBite -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen">
+
+    <!-- Navbar or header -->
+    <header>
+        {% comment  %}<h1 class="text-2xl font-bold">{% block header %}F1Info{% endblock %}</h1>{% endcomment %}
+        {% include "headers.html" %}
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-500 mt-12 p-4">
+        &copy; F1Info
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
