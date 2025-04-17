@@ -10,14 +10,13 @@ class RaceView(View):
 
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
-        context_dict = {"head": {"status": "0", "statusDescription": ""}}
+        context_dict = {}
         table_data = []
         year = request.TLPOST.get("year")
         races = list(Race.objects.filter(year=year).order_by("round"))
 
         if not races:
-            context_dict["head"]["status"] = "2"
-            context_dict["head"]["statusDescription"] = "No races found"
+            pass
             # TODO: Return 404 page
 
         for race in races:
@@ -29,7 +28,7 @@ class RaceView(View):
                 "isSprint": race.is_sprint,
             }
             table_data.append(res)
-        context_dict["body"] = table_data
+        context_dict["races"] = table_data
         if self.API_RESPONSE:
             return JsonResponse(table_data)
 
@@ -41,28 +40,24 @@ class RaceDetailedView(View):
 
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
-        context_dict = {"head": {"status": "0", "statusDescription": ""}}
-
         year = request.TLPOST.get("year")
         race_round = request.TLPOST.get("round")
 
-        race = Race.objects.filter(year=year, round=race_round).first()
+        race = Race.objects.filter(year=year, round=race_round).select_related("circuit").first()
         if not race:
-            context_dict["head"]["status"] = "2"
-            context_dict["head"]["statusDescription"] = "No race found"
+            pass
             # TODO: Return 404 page
-
-        table_data = {
+ 
+        context_dict = {
             "officalName": race.official_name,
             "isSprint": race.is_sprint,
             "fp1Time": race.fp1_time,
             "fp2Time": race.fp2_time,
             "fp3Time": race.fp3_time,
             "qualiTime": race.quali_time,
-            "sprintQualiTime": race.fp1_time,
+            "sprintQualiTime": race.spritn_quali_time,
             "raceTime": race.race_time,
         }
-        context_dict["body"] = table_data
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)

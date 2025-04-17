@@ -40,6 +40,10 @@ class Circuit(models.Model):
         managed = False
         db_table = "circuit"
 
+    @property
+    def circuit_image(self):
+        return static(f"circuit_img/{self.pk}.avif")
+
 
 class Constructor(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
