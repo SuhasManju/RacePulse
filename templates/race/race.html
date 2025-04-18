@@ -2,5 +2,59 @@
 
 {% block content %}
 
+<div class="w-full flex flex-col m-4">
+  <h1 class="text-3xl font-bold mb-4 text-gray-900 text-center">{{officalName}}</h1>
+</div>
+
+<div class="w-full flex flex-col md:flex-row items-center m-4">
+    <!-- Left: Image -->
+    <div class="w-full md:w-1/2 h-64 md:h-auto bg-white">
+      <img src={{circuitImg}} alt="{{officalName}} Image" class="w-full h-full object-cover rounded-l-2xl" />
+    </div>
+  
+    <!-- Right: Text -->
+    <div class="w-full md:w-1/2 p-6 bg-white rounded-r-2xl flex flex-col justify-center relative overflow-y-auto">
+      <h1 class="text-2xl font-bold text-gray-900 absolute top-6 left-6 right-6">
+        {{name}}
+      </h1>
+    
+      <div class="mt-20 text-gray-700 flex flex-wrap gap-6">
+        <div class="flex flex-col items-start bg-white p-4 rounded-xl">
+          <h5 class="font-bold text-xl text-gray-900">Number of Laps</h5>
+          <p class="text-gray-900">{{noLaps}}</p>
+        </div>
+        <div class="flex flex-col items-start bg-white p-4 rounded-xl">
+          <h5 class="font-bold text-xl text-gray-900">Race Distance</h5>
+          <p class="text-gray-900">{{totalDist}} km.</p>
+        </div>
+        <div class="flex flex-col items-start bg-white p-4 rounded-xl">
+          <h5 class="font-bold text-xl text-gray-900">Circuit Length</h5>
+          <p class="text-gray-900">{{length}} km.</p>
+        </div>
+      </div>
+      
+    </div>
+    
+</div>
+
+
+
+<div class="flex justify-evenly border-gray-300">
+  {% for x in availableData %}
+    <button 
+      {% comment %} hx-get="{% url 'race_tab_partial' race.id %}?tab={{ x }}" {% endcomment %}
+      hx-target="#tab-content"
+      hx-swap="innerHTML"
+      class="flex-1 text-center px-4 py-2 border-b-2 font-medium text-gray-700 hover:text-blue-600 hover:border-blue-500">
+      {{ x }}
+    </button>
+  {% endfor %}
+</div>
+
+
+{% comment %} <div id="tab-content" class="mt-6">
+  {% include "tabs/fp1.html" %}
+</div> {% endcomment %}
+
 
 {% endblock content %}

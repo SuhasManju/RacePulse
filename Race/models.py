@@ -7,8 +7,8 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from RacePulse.utils import *
-from django.conf.urls.static import static
-
+from django.templatetags.static import static
+from functools import cached_property
 
 class Chassis(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
@@ -40,7 +40,7 @@ class Circuit(models.Model):
         managed = False
         db_table = "circuit"
 
-    @property
+    @cached_property
     def circuit_image(self):
         return static(f"circuit_img/{self.pk}.avif")
 
@@ -159,7 +159,7 @@ class Driver(models.Model):
         managed = False
         db_table = "driver"
 
-    @property
+    @cached_property
     def driver_img(self):
         return static(f"driver_img/{self.pk}")
 
@@ -298,40 +298,40 @@ class Race(models.Model):
         db_table = "race"
         unique_together = (("year", "round"),)
 
-    @property
+    @cached_property
     def is_sprint(self):
         # checking whether the week is a sprint
         if self.sprint_qualifying_date:
             return True
         return False
 
-    @property
+    @cached_property
     def fp1_time(self):
         return combine_datetime(self.free_practice_1_date, self.free_practice_1_time)
 
-    @property
+    @cached_property
     def fp2_time(self):
         return combine_datetime(self.free_practice_2_date, self.free_practice_2_time)
 
-    @property
+    @cached_property
     def fp3_time(self):
         return combine_datetime(self.free_practice_3_date, self.free_practice_3_time)
 
-    @property
+    @cached_property
     def sprint_time(self):
         return combine_datetime(self.sprint_race_date, self.sprint_race_time)
 
-    @property
-    def spritn_quali_time(self):
+    @cached_property
+    def sprint_quali_time(self):
         return combine_datetime(
             self.sprint_qualifying_date, self.sprint_qualifying_time
         )
 
-    @property
+    @cached_property
     def quali_time(self):
-        return combine_datetime(self.qualifying_1_date, self.qualifying_1_time)
+        return combine_datetime(self.qualifying_date, self.qualifying_time)
 
-    @property
+    @cached_property
     def race_time(self):
         return combine_datetime(self.date, self.time)
 
