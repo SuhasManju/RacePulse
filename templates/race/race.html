@@ -42,7 +42,7 @@
 <div class="flex justify-evenly border-gray-300">
   {% for x in availableData %}
     <button 
-      {% comment %} hx-get="{% url 'race_tab_partial' race.id %}?tab={{ x }}" {% endcomment %}
+      hx-get="{% url 'session_data' id %}?session={{ x }}"
       hx-target="#tab-content"
       hx-swap="innerHTML"
       class="flex-1 text-center px-4 py-2 border-b-2 font-medium text-gray-700 hover:text-blue-600 hover:border-blue-500">
@@ -52,9 +52,10 @@
 </div>
 
 
-{% comment %} <div id="tab-content" class="mt-6">
-  {% include "tabs/fp1.html" %}
-</div> {% endcomment %}
+<div id="tab-content" class="mt-6">
+  {% include "race/_partials/race.html" %}
+</div>
+
 
 
 {% endblock content %}

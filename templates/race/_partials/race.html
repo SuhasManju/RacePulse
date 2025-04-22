@@ -1,0 +1,81 @@
+{% load custom_filter %}
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Postion
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Driver
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Team
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Start Position
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Time
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Points
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in raceData %}
+            <tr class="bg-white hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {% if data.position %}
+                        {{data.position}}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {{data.driver}}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900">
+                    {{data.constructor}}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    <div class="grid grid-cols-2 items-center w-full">
+                        <div class="text-left">
+                            {% if data.startPos %}
+                                {{ data.startPos }}
+                            {% else %}
+                                Pit Start
+                            {% endif %}
+                        </div>
+                        <div class="text-left">
+                            {% if data.posGain > 0 %}
+                                <span class="text-base text-green-500">&#x25B2;  {{ data.posGain | abs_val}}</span>
+                            {% elif data.posGain < 0 %}
+                                <span class="text-base text-red-500">&#x25BC; {{ data.posGain | abs_val }}</span>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </div>
+                    </div>
+                </td>                             
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {% if data.timeGap %}
+                        {{data.timeGap}}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {% if data.points %}
+                        {{data.points}}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

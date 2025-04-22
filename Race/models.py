@@ -354,6 +354,27 @@ class RaceConstructorStanding(models.Model):
 
 
 class RaceData(models.Model):
+
+    # Types model choices
+    DRIVER_OF_THE_DAY_RESULT = 'DRIVER_OF_THE_DAY_RESULT'
+    FASTEST_LAP = 'FASTEST_LAP'
+    FREE_PRACTICE_1_RESULT = 'FREE_PRACTICE_1_RESULT'
+    FREE_PRACTICE_2_RESULT = 'FREE_PRACTICE_2_RESULT'
+    FREE_PRACTICE_3_RESULT = 'FREE_PRACTICE_3_RESULT'
+    FREE_PRACTICE_4_RESULT = 'FREE_PRACTICE_4_RESULT'
+    PIT_STOP = 'PIT_STOP'
+    PRE_QUALIFYING_RESULT = 'PRE_QUALIFYING_RESULT'
+    QUALIFYING_1_RESULT = 'QUALIFYING_1_RESULT'
+    QUALIFYING_2_RESULT = 'QUALIFYING_2_RESULT'
+    QUALIFYING_RESULT = 'QUALIFYING_RESULT'
+    RACE_RESULT = 'RACE_RESULT'
+    SPRINT_QUALIFYING_RESULT = 'SPRINT_QUALIFYING_RESULT'
+    SPRINT_RACE_RESULT = 'SPRINT_RACE_RESULT'
+    SPRINT_STARTING_GRID_POSITION = 'SPRINT_STARTING_GRID_POSITION'
+    STARTING_GRID_POSITION = 'STARTING_GRID_POSITION'
+    WARMING_UP_RESULT = 'WARMING_UP_RESULT'
+
+
     pk = models.CompositePrimaryKey("race_id", "type", "position_display_order")
     race = models.ForeignKey(Race, models.DO_NOTHING)
     type = models.CharField(max_length=50)
@@ -445,6 +466,20 @@ class RaceData(models.Model):
         managed = False
         db_table = "race_data"
         unique_together = (("race", "type", "position_display_order"),)
+
+    @cached_property
+    def position_gained(self):
+        start_pos = self.race_grid_position_number
+        end_pos = self.position_number
+
+        if start_pos and end_pos:
+            return start_pos - end_pos
+
+        # If start_pos is not available it means the driver started in pit lane
+        if end_pos:
+            return 20 - end_pos
+
+        return None
 
 
 class RaceDriverStanding(models.Model):
