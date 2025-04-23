@@ -27,7 +27,7 @@ class RaceView(View):
                 "id": race.id,
                 "fullName": race.official_name,
                 "raceNo": race.round,
-                "raceDate": race.date,
+                "raceDate": race.event_date,
                 "isSprint": race.is_sprint,
             }
             table_data.append(res)
@@ -96,12 +96,13 @@ class RaceDetailedView(View):
                 'constructor': r.constructor.name,
                 'points': trim_decimal_zeros(r.race_points),
                 'startPos': r.race_grid_position_number,
-                'posGain': r.position_gained,
+                'posGain': r.race_positions_gained,
                 'timeGap': r.race_gap,
             }
             race_data.append(i)
 
         context_dict['raceData'] = race_data
+        context_dict['active_tab'] = "Race"
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)
@@ -110,7 +111,6 @@ class RaceDetailedView(View):
 
 
 class RaceSessionView(View):
-    API_RESPONSE = False
     SESSION_DICT = {'FP1': RaceData.FREE_PRACTICE_1_RESULT,
                     'FP2': RaceData.FREE_PRACTICE_2_RESULT,
                     'FP3': RaceData.FREE_PRACTICE_3_RESULT,
@@ -119,15 +119,64 @@ class RaceSessionView(View):
                     'Sprint': RaceData.SPRINT_RACE_RESULT,
                     'Race': RaceData.RACE_RESULT,
                     }
+    FREE_PRACTICE_TEMPLATE = "race/_partials/practice.html"
+    QUALI_TEMPLATE = "race/_partials/qualifying.html"
+    RACE_TEMPLATE = "race/_partials/race.html"
 
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
+        template = ""
+
         race_id = request.TLPOST.get('race_id')
         session = request.TLPOST.get("session")
 
         race_data_qs = list(RaceData.objects.filter(race_id=race_id, type=self.SESSION_DICT.get(session)).order_by(
             OrderBy(F("position_number"), nulls_last=True)).select_related("driver", "constructor"))
 
-        if not race_data_qs:
-            pass
-        # TODO: Return 404 Page
+        race_data = []
+
+        if session in ['Race', 'Sprint']:
+            template = self.RACE_TEMPLATE
+            for r in race_data_qs:
+                i = {
+                    'driver': r.driver.name,
+                    'position': r.position_number,
+                    'constructor': r.constructor.name,
+                    'points': trim_decimal_zeros(r.race_points),
+                    'startPos': r.race_grid_position_number,
+                    'posGain': r.race_positions_gained,
+                    'timeGap': r.race_gap,
+                }
+                race_data.append(i)
+
+        if session in ['Qualifying', 'Sprint Qualifying']:
+            template = self.QUALI_TEMPLATE
+            for r in race_data_qs:
+                i = {
+                    'driver': r.driver.name,
+                    'position': r.position_number,
+                    'constructor': r.constructor.name,
+                    'q1': r.qualifying_q1,
+                    'q2': r.qualifying_q2,
+                    'q3': r.qualifying_q3,
+                    'timeGap': r.qualifying_gap,
+                }
+                race_data.append(i)
+
+        if session in ['FP1', 'FP2', 'FP3']:
+            template = self.FREE_PRACTICE_TEMPLATE
+            for r in race_data_qs:
+                i = {
+                    'driver': r.driver.name,
+                    'position': r.position_number,
+                    'constructor': r.constructor.name,
+                    'time': r.practice_time,
+                    'timeGap': r.practice_gap,
+
+                }
+                race_data.append(i)
+
+        context_dict = {}
+        context_dict['raceData'] = race_data
+
+        return render(request, template, context_dict)

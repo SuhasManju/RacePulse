@@ -1,0 +1,76 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Postion
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Driver
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Team
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Q1
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Q2
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Q3
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Gap
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in raceData %}
+            <tr class="bg-white hover:bg-gray-50">
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {% if data.position %}
+                        {{data.position}}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {{data.driver}}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900">
+                    {{data.constructor}}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900">
+                    {% if data.q1 %}
+                        {{data.q1}}
+                    {% else %}
+                        -                    
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900">
+                    {% if data.q2 %}
+                        {{data.q2}}
+                    {% else %}
+                        -                    
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900">
+                    {% if data.q3 %}
+                        {{data.q3}}
+                    {% else %}
+                        -                    
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900">
+                    {% if data.timeGap %}
+                        {{data.timeGap}}
+                    {% else %}
+                        -                    
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

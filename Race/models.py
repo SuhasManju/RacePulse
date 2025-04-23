@@ -335,6 +335,21 @@ class Race(models.Model):
     def race_time(self):
         return combine_datetime(self.date, self.time)
 
+    from functools import cached_property
+
+    @cached_property
+    def event_date(self):
+        fp1_date = self.free_practice_1_date
+        race_date = self.date
+
+        if fp1_date.month == race_date.month:
+            # Same month: May 12–14 2025
+            return f"{fp1_date.strftime('%b')} {fp1_date.day} – {race_date.day} {race_date.year}"
+        else:
+            # Cross month: May 30 – June 2 2025
+            return f"{fp1_date.strftime('%b')} {fp1_date.day} – {race_date.strftime('%b')} {race_date.day} {race_date.year}"
+
+
 
 class RaceConstructorStanding(models.Model):
     pk = models.CompositePrimaryKey("race_id", "position_display_order")
@@ -466,20 +481,6 @@ class RaceData(models.Model):
         managed = False
         db_table = "race_data"
         unique_together = (("race", "type", "position_display_order"),)
-
-    @cached_property
-    def position_gained(self):
-        start_pos = self.race_grid_position_number
-        end_pos = self.position_number
-
-        if start_pos and end_pos:
-            return start_pos - end_pos
-
-        # If start_pos is not available it means the driver started in pit lane
-        if end_pos:
-            return 20 - end_pos
-
-        return None
 
 
 class RaceDriverStanding(models.Model):

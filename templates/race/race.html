@@ -42,20 +42,41 @@
 <div class="flex justify-evenly border-gray-300">
   {% for x in availableData %}
     <button 
+      class="tab-button flex-1 text-center px-4 py-2 border-b-2 font-medium 
+             {% if x == active_tab %}
+               text-blue-600 border-blue-500
+             {% else %}
+               text-gray-700 border-transparent hover:text-blue-600 hover:border-blue-500
+             {% endif %}"
+      data-tab="{{ x }}"
       hx-get="{% url 'session_data' id %}?session={{ x }}"
       hx-target="#tab-content"
-      hx-swap="innerHTML"
-      class="flex-1 text-center px-4 py-2 border-b-2 font-medium text-gray-700 hover:text-blue-600 hover:border-blue-500">
+      hx-swap="innerHTML">
       {{ x }}
     </button>
   {% endfor %}
 </div>
 
 
+
 <div id="tab-content" class="mt-6">
   {% include "race/_partials/race.html" %}
 </div>
 
+<script>
+  document.addEventListener('htmx:beforeRequest', function (e) {
+    if (!e.target.matches('.tab-button')) return;
 
+    // Clear existing active state
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.classList.remove('text-blue-600', 'border-blue-500');
+      btn.classList.add('text-gray-700', 'border-transparent');
+    });
+
+    // Set active state on clicked button
+    e.target.classList.remove('text-gray-700', 'border-transparent');
+    e.target.classList.add('text-blue-600', 'border-blue-500');
+  });
+</script>
 
 {% endblock content %}
