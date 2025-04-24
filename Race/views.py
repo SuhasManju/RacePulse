@@ -79,8 +79,8 @@ class RaceDetailedView(View):
             (race.sprint_quali_time, "Sprint Qualifying"),
             (race.fp2_time, "FP2"),
             (race.fp3_time, "FP3"),
-            (race.quali_time, "Qualifying"),
             (race.sprint_time, "Sprint"),
+            (race.quali_time, "Qualifying"),
         ]
 
         available_data = [label for time, label in data_map if time]

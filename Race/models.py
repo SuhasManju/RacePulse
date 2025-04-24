@@ -335,8 +335,6 @@ class Race(models.Model):
     def race_time(self):
         return combine_datetime(self.date, self.time)
 
-    from functools import cached_property
-
     @cached_property
     def event_date(self):
         fp1_date = self.free_practice_1_date
