@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_vite",
     "Race",
     "RacePulse",
     "Standing",
@@ -67,6 +68,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'RacePulse.context_processors.debug_mode'
             ],
         },
     },
@@ -132,3 +134,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": DEBUG,  # Use DEBUG to determine dev mode
+        "dev_server_port": 5173,  # Default port Vite runs on
+    }
+}
+
+STATIC_ROOT = BASE_DIR / 'static_files'
+
+DJANGO_VITE_MANIFEST_PATH = BASE_DIR / "static_files/dist/.vite/manifest.json"
