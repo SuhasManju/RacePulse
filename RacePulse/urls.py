@@ -22,4 +22,5 @@ urlpatterns = [
     path("e@am!nat!0n/", admin.site.urls),
     path("race/", include("Race.urls")),
     path("standing/", include("Standing.urls")),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]

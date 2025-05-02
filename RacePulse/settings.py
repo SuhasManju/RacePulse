@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "Race",
     "RacePulse",
     "Standing",
+    "tailwind",
+    "theme",
+    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = "RacePulse.urls"
@@ -132,3 +136,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+TAILWIND_APP_NAME = 'theme'
