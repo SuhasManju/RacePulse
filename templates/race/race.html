@@ -13,12 +13,15 @@
     </div>
   
     <!-- Right: Text -->
-    <div class="w-full md:w-1/2 p-6 bg-white rounded-r-2xl flex flex-col justify-center relative overflow-y-auto">
-      <h1 class="text-2xl font-bold text-gray-900 absolute top-6 left-6 right-6">
-        {{name}}
-      </h1>
+      {% if nextEvent %}
+      <div class="w-full md:w-1/2 p-6 bg-white rounded-r-2xl flex flex-col justify-center relative overflow-y-auto">
+        <div class="flex flex-col items-center bg-white p-4 rounded-xl mb-6">
+          <h5 class="font-bold text-xl text-gray-900">{{nextEventType}}</h5>
+          {%include "timer.html"%}
+        </div>
+      {% endif %}
     
-      <div class="mt-20 text-gray-700 flex flex-wrap gap-6">
+      <div class="mt-1 text-gray-700 flex flex-wrap gap-6 justify-between">
         <div class="flex flex-col items-start bg-white p-4 rounded-xl">
           <h5 class="font-bold text-xl text-gray-900">Number of Laps</h5>
           <p class="text-gray-900">{{noLaps}}</p>
@@ -32,12 +35,9 @@
           <p class="text-gray-900">{{length}} km.</p>
         </div>
       </div>
-      
     </div>
     
 </div>
-
-
 
 <div class="flex justify-evenly border-gray-300">
   {% for x in availableData %}
@@ -57,26 +57,12 @@
   {% endfor %}
 </div>
 
-
-
 <div id="tab-content" class="mt-6">
   {% include "race/_partials/race.html" %}
 </div>
 
 <script>
-  document.addEventListener('htmx:beforeRequest', function (e) {
-    if (!e.target.matches('.tab-button')) return;
-
-    // Clear existing active state
-    document.querySelectorAll('.tab-button').forEach(btn => {
-      btn.classList.remove('text-blue-600', 'border-blue-500');
-      btn.classList.add('text-gray-700', 'border-transparent');
-    });
-
-    // Set active state on clicked button
-    e.target.classList.remove('text-gray-700', 'border-transparent');
-    e.target.classList.add('text-blue-600', 'border-blue-500');
-  });
+  {% include "race/race.js" %}
 </script>
 
 {% endblock content %}
