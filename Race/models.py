@@ -347,6 +347,39 @@ class Race(models.Model):
             # Cross month: May 30 – June 2 2025
             return f"{fp1_date.strftime('%b')} {fp1_date.day} – {race_date.strftime('%b')} {race_date.day} {race_date.year}"
 
+    @cached_property
+    def available_events(self):
+        data_map = [
+            (self.fp1_time, "FP1"),
+            (self.sprint_quali_time, "Sprint Qualifying"),
+            (self.fp2_time, "FP2"),
+            (self.fp3_time, "FP3"),
+            (self.sprint_time, "Sprint"),
+            (self.quali_time, "Qualifying"),
+            (self.race_time, "Race")
+        ]
+
+        available_data = [label for time, label in data_map if time]
+        return available_data
+
+    @cached_property
+    def next_event(self):
+        data_map = [
+            (self.fp1_time, "FP1"),
+            (self.sprint_quali_time, "Sprint Qualifying"),
+            (self.fp2_time, "FP2"),
+            (self.fp3_time, "FP3"),
+            (self.sprint_time, "Sprint"),
+            (self.quali_time, "Qualifying"),
+            (self.race_time, "Race")
+        ]
+        now = timezone.now()
+        next_event = [None, None]
+        for event in data_map:
+            if event[0] and event[0] > now:
+                next_event = event
+                break
+        return next_event
 
 
 class RaceConstructorStanding(models.Model):

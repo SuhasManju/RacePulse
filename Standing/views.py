@@ -8,8 +8,8 @@ import copy
 
 
 class CurrentStandingView(View):
-    API_RESPONSE = True
-    TEMPLATE = ""
+    API_RESPONSE = False
+    TEMPLATE = "standings/standings.html"
 
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
@@ -70,5 +70,11 @@ class CurrentStandingView(View):
 
         context_dict['teamData'] = constructor_data
 
+        context_dict['labels'] = df['race__grand_prix__abbreviation'].unique(
+        ).tolist()
+        print(context_dict)
+
         if self.API_RESPONSE:
             return JsonResponse(context_dict)
+
+        return render(request, self.TEMPLATE, context_dict)

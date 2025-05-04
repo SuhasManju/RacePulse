@@ -74,26 +74,9 @@ class RaceDetailedView(View):
             "length": race.course_length,
         }
 
-        data_map = [
-            (race.fp1_time, "FP1"),
-            (race.sprint_quali_time, "Sprint Qualifying"),
-            (race.fp2_time, "FP2"),
-            (race.fp3_time, "FP3"),
-            (race.sprint_time, "Sprint"),
-            (race.quali_time, "Qualifying"),
-            (race.race_time, "Race")
-        ]
+        context_dict['availableData'] = race.available_events
 
-        available_data = [label for time, label in data_map if time]
-        context_dict['availableData'] = available_data
-
-        now = timezone.now()
-        next_event = [None, None]
-        for event in data_map:
-            if event[0] and event[0] > now:
-                next_event = event
-                break
-
+        next_event = race.next_event
         context_dict['nextEvent'] = next_event[0]
         context_dict['nextEventType'] = next_event[1]
 
