@@ -43,8 +43,6 @@ class RaceDetailedView(View):
 
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
-        available_data = []
-
         year = request.TLPOST.get("year")
         race_round = request.TLPOST.get("round")
 

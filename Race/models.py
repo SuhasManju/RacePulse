@@ -359,7 +359,7 @@ class Race(models.Model):
             (self.race_time, "Race")
         ]
 
-        available_data = [label for time, label in data_map if time]
+        available_data = [(label, time) for time, label in data_map if time]
         return available_data
 
     @cached_property

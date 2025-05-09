@@ -14,6 +14,20 @@ document.addEventListener('htmx:beforeRequest', function (e) {
     e.target.classList.add('text-blue-600', 'border-blue-500');
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".local-time").forEach(el => {
+        const utc = el.dataset.utc;
+        if (!utc) return;
+
+        try {
+            el.textContent = formatUtcToLocal(utc);
+        } catch (e) {
+            console.error("Failed to format UTC:", utc, e);
+            el.textContent = utc; // fallback
+        }
+    });
+});
+
 
 function timeInterval() {
     const nextEventTime = new Date("{{ nextEvent|safe|escapejs }}");
@@ -69,6 +83,8 @@ function timeInterval() {
         }
     }
 }
+
+
 
 timeInterval()
 

@@ -39,27 +39,62 @@
     
 </div>
 
-<div class="flex justify-evenly border-gray-300">
-  {% for x in availableData %}
-    <button 
-      class="tab-button flex-1 text-center px-4 py-2 border-b-2 font-medium 
-             {% if x == active_tab %}
-               text-blue-600 border-blue-500
-             {% else %}
-               text-gray-700 border-transparent hover:text-blue-600 hover:border-blue-500
-             {% endif %}"
-      data-tab="{{ x }}"
-      hx-get="{% url 'session_data' id %}?session={{ x }}"
-      hx-target="#tab-content"
-      hx-swap="innerHTML">
-      {{ x }}
-    </button>
-  {% endfor %}
+{% if raceData %}
+  <div class="flex justify-evenly border-gray-300">
+    {% for x,y in availableData %}
+      <button 
+        class="tab-button flex-1 text-center px-4 py-2 border-b-2 font-medium 
+              {% if x == active_tab %}
+                text-blue-600 border-blue-500
+              {% else %}
+                text-gray-700 border-transparent hover:text-blue-600 hover:border-blue-500
+              {% endif %}"
+        data-tab="{{ x }}"
+        hx-get="{% url 'session_data' id %}?session={{ x }}"
+        hx-target="#tab-content"
+        hx-swap="innerHTML">
+        {{ x }}
+      </button>
+    {% endfor %}
+  </div>
+
+  <div id="tab-content" class="mt-6">
+    {% include "race/_partials/race.html" %}
+  </div>
+
+{% else %}
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+              <th scope="col" class="px-6 py-3">
+                  Event
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  Timings
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for x,y in availableData %}
+          <tr class="bg-white hover:bg-gray-50">
+              <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                {{x}}
+              </td>
+              <td class="px-6 py-4 font-medium text-gray-900">
+                <span>{{ y|date:"F j, Y h:i A" }} UTC</span><br>
+                <span>Local: <span class="local-time" data-utc="{{ y|date:'c' }}"></span></span>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
 </div>
 
-<div id="tab-content" class="mt-6">
-  {% include "race/_partials/race.html" %}
-</div>
+{% endif %}
+
+{{ availableData|json_script:"available-data" }}
+
 
 <script>
   {% include "race/race.js" %}

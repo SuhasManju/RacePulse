@@ -72,7 +72,6 @@ class CurrentStandingView(View):
 
         context_dict['labels'] = df['race__grand_prix__abbreviation'].unique(
         ).tolist()
-        print(context_dict)
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)
