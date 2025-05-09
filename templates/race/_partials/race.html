@@ -78,4 +78,9 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="mt-2 text-gray-500">
+    {% for msg, drivers in message.items %}
+        <p>{{ msg }} – {{ drivers }}</p>
+    {% endfor %}
+    </div>
 </div>

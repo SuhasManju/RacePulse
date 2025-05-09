@@ -79,6 +79,7 @@ class RaceDetailedView(View):
         context_dict['nextEventType'] = next_event[1]
 
         race_data = []
+        msg_dict = {}
         for r in race_data_qs:
             i = {
                 'driver': r.driver.name,
@@ -87,12 +88,18 @@ class RaceDetailedView(View):
                 'points': trim_decimal_zeros(r.race_points),
                 'startPos': r.race_grid_position_number,
                 'posGain': r.race_positions_gained,
-                'timeGap': r.race_gap,
+                'timeGap': r.race_gap if r.position_number else r.position_text,
             }
+            if not r.position_number:
+                if msg_dict.get(r.race_reason_retired):
+                    msg_dict[r.race_reason_retired] += f", {r.driver.name}"
+                else:
+                    msg_dict[r.race_reason_retired] = f"{r.driver.name}"
             race_data.append(i)
 
         context_dict['raceData'] = race_data
         context_dict['active_tab'] = "Race"
+        context_dict['message'] = msg_dict
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)
@@ -124,6 +131,7 @@ class RaceSessionView(View):
             OrderBy(F("position_number"), nulls_last=True)).select_related("driver", "constructor"))
 
         race_data = []
+        msg_dict = {}
 
         if session in ['Race', 'Sprint']:
             template = self.RACE_TEMPLATE
@@ -135,9 +143,15 @@ class RaceSessionView(View):
                     'points': trim_decimal_zeros(r.race_points),
                     'startPos': r.race_grid_position_number,
                     'posGain': r.race_positions_gained,
-                    'timeGap': r.race_gap,
+                    'timeGap': r.race_gap if r.position_number else r.position_text,
+
                 }
                 race_data.append(i)
+                if not r.position_number:
+                    if msg_dict.get(r.race_reason_retired):
+                        msg_dict[r.race_reason_retired] += f", {r.driver.name}"
+                    else:
+                        msg_dict[r.race_reason_retired] = f"{r.driver.name}"
 
         if session in ['Qualifying', 'Sprint Qualifying']:
             template = self.QUALI_TEMPLATE
@@ -168,5 +182,6 @@ class RaceSessionView(View):
 
         context_dict = {}
         context_dict['raceData'] = race_data
+        context_dict['message'] = msg_dict
 
         return render(request, template, context_dict)
