@@ -5,7 +5,7 @@ from Race.models import *
 from RacePulse.utils import CREATE_REQUEST
 from django.db.models.expressions import OrderBy
 from django.db.models import F
-from RacePulse.utils import trim_decimal_zeros
+from RacePulse.utils import smart_format
 
 
 class RaceView(View):

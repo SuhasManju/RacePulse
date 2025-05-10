@@ -1,7 +1,7 @@
 from functools import wraps
 from django.utils import timezone
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 TEAM_COLOR_DICT = {
     "alpine": "#00A1E8",
@@ -49,6 +49,18 @@ def trim_decimal_zeros(value):
     if isinstance(value, (Decimal)):
         return value.normalize()
     return value
+
+
+def smart_format(value, decimal_places=2):
+    try:
+        value = Decimal(value).quantize(
+            Decimal(f'1.{"0" * decimal_places}'), rounding=ROUND_HALF_UP
+        )
+        if value == value.to_integral():
+            return int(value)
+        return float(value)
+    except Exception:
+        return value
 
 
 def invert_hex_color(hex_color: str) -> str:

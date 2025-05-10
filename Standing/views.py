@@ -5,7 +5,7 @@ from RacePulse.utils import CREATE_REQUEST
 from Race.models import *
 import pandas as pd
 import copy
-from RacePulse.utils import TEAM_COLOR_DICT
+from RacePulse.utils import TEAM_COLOR_DICT, smart_format
 
 
 class CurrentStandingView(View):
@@ -57,7 +57,7 @@ class CurrentStandingView(View):
 
             i = {
                 'driverName': driver_info['driver__name'],
-                'points': points,
+                'points': smart_format(points),
                 'pointsCumSum': driver_points_list,
                 'color': driver_color
             }
@@ -73,7 +73,7 @@ class CurrentStandingView(View):
                                 == constructor_id].iloc[0].to_dict()
             i = {
                 'teamName': team_info['constructor__name'],
-                'points': points,
+                'points': smart_format(points),
                 'pointsCumSum': team_points_list,
                 'color': TEAM_COLOR_DICT.get(constructor_id)
             }
