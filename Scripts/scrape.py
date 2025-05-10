@@ -90,3 +90,25 @@ def fill_circuit_image(year):
         with open(f"static/circuit_img/{race.circuit.pk}.avif", "wb") as f:
             f.write(img_source)
 
+
+def fill_team_image(year):
+    BASE_URL = "https://media.formula1.com/image/upload/f_auto,c_limit,q_75,w_1320/content/dam/fom-website/2018-redesign-assets/team logos/"
+
+    teams = SeasonConstructor.objects.filter(
+        year=year).select_related("constructor")
+
+    os.makedirs(f"static/team_img", exist_ok=True)
+
+    for t in teams:
+        name = t.constructor.name.lower().split(" ")
+        name = " ".join(name)
+        url = BASE_URL + f"{name}"
+        res = requests.get(url)
+        print(url)
+
+        if res.status_code != 200:
+            print(f"Image not found for: {name}")
+            continue
+
+        with open(f"static/team_img/{t.constructor.pk}.avif", "wb") as f:
+            f.write(res.content)

@@ -70,6 +70,10 @@ class Constructor(models.Model):
         managed = False
         db_table = "constructor"
 
+    @cached_property
+    def team_img(self):
+        return static(f"team_img/{self.pk}")
+
 
 class ConstructorChronology(models.Model):
     pk = models.CompositePrimaryKey("constructor_id", "position_display_order")
