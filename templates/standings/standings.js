@@ -23,23 +23,12 @@ function makeChart(ctxId, labels, data) {
 }
 
 
-function getRandomColor() {
-    const colors = [
-        '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-        '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe',
-        '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000',
-        '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-
 const driverData = JSON.parse(document.getElementById("driver-data").textContent);
 const lables = JSON.parse(document.getElementById("labels").textContent);
 const driverDatasets = driverData.map(driver => ({
     label: driver.driverName,
     data: driver.pointsCumSum.map(([race, points]) => ({ x: race, y: points })),
-    borderColor: getRandomColor(),
+    borderColor: driver.color,
     tension: 0.3,
     fill: false
 }));
@@ -48,7 +37,7 @@ const teamData = JSON.parse(document.getElementById("team-data").textContent);
 const teamDatasets = teamData.map(team => ({
     label: team.teamName,
     data: team.pointsCumSum.map(([race, points]) => ({ x: race, y: points })),
-    borderColor: getRandomColor(),
+    borderColor: team.color,
     tension: 0.3,
     fill: false
 }));

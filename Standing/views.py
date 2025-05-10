@@ -5,6 +5,7 @@ from RacePulse.utils import CREATE_REQUEST
 from Race.models import *
 import pandas as pd
 import copy
+from RacePulse.utils import TEAM_COLOR_DICT
 
 
 class CurrentStandingView(View):
@@ -28,6 +29,7 @@ class CurrentStandingView(View):
         # -  Since a event can have both race and sprint we are adding them together
         # - We would need two queries for team and drivers
         # - max size of dataframe would be 32 * 20 = 640
+
         df = pd.DataFrame(driver_standing_qs, columns=columns)
         df['points'] = df['race_points'].fillna(0).astype("double")
         team_df = copy.deepcopy(df)
@@ -42,14 +44,22 @@ class CurrentStandingView(View):
             ['constructor_id', 'constructor__name', 'race__grand_prix__abbreviation', 'race_id'], keep='last')
 
         driver_data = []
+        already_visited_team = set()
         for driver_id, points in df.groupby('driver_id')['c_points'].max().sort_values(ascending=False).items():
             driver_points_list = df[df['driver_id'] == driver_id][[
                 'race__grand_prix__abbreviation', 'c_points']].values.tolist()
             driver_info = df[df['driver_id'] == driver_id].iloc[0].to_dict()
+
+            driver_color = TEAM_COLOR_DICT.get(driver_info['constructor_id'])
+            if driver_info['constructor_id'] in already_visited_team:
+                driver_color = invert_hex_color(driver_color)
+            already_visited_team.add(driver_info['constructor_id'])
+
             i = {
                 'driverName': driver_info['driver__name'],
                 'points': points,
                 'pointsCumSum': driver_points_list,
+                'color': driver_color
             }
             driver_data.append(i)
 
@@ -65,6 +75,7 @@ class CurrentStandingView(View):
                 'teamName': team_info['constructor__name'],
                 'points': points,
                 'pointsCumSum': team_points_list,
+                'color': TEAM_COLOR_DICT.get(constructor_id)
             }
             constructor_data.append(i)
 

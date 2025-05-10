@@ -74,6 +74,10 @@ class Constructor(models.Model):
     def team_img(self):
         return static(f"team_img/{self.pk}")
 
+    @cached_property
+    def team_color(self):
+        return TEAM_COLOR_DICT.get(self.pk)
+
 
 class ConstructorChronology(models.Model):
     pk = models.CompositePrimaryKey("constructor_id", "position_display_order")

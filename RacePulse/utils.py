@@ -3,6 +3,19 @@ from django.utils import timezone
 from datetime import datetime
 from decimal import Decimal
 
+TEAM_COLOR_DICT = {
+    "alpine": "#00A1E8",
+    "aston-martin": "#229971",
+    "ferrari": "#E80020",
+    "haas": "#B6BABD",
+    "kick-sauber": "#52E252",
+    "mclaren": "#FF8000",
+    "mercedes": "#27F4D2",
+    "racing-bulls": "#6692FF",
+    "red-bull": "#3671C6",
+    "williams": "#1868DB",
+}
+
 # Wrapper function that puts every input a single dictionary for ease of use
 def CREATE_REQUEST(func):
     @wraps(func)
@@ -36,3 +49,20 @@ def trim_decimal_zeros(value):
     if isinstance(value, (Decimal)):
         return value.normalize()
     return value
+
+
+def invert_hex_color(hex_color: str) -> str:
+    hex_color = hex_color.lstrip('#')
+
+    # Convert hex to RGB
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+
+    # Invert each channel
+    inverted_r = 255 - r
+    inverted_g = 255 - g
+    inverted_b = 255 - b
+
+    # Convert back to hex and return formatted string
+    return "#{:02x}{:02x}{:02x}".format(inverted_r, inverted_g, inverted_b)
