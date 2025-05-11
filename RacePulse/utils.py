@@ -2,6 +2,7 @@ from functools import wraps
 from django.utils import timezone
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
+import json
 
 TEAM_COLOR_DICT = {
     "alpine": "#00A1E8",
@@ -32,6 +33,24 @@ def CREATE_REQUEST(func):
         if not hasattr(request, "year"):
             year = kwargs.get("year") or 2025
             request.year = year
+
+        return func(view_self, request, *args, **kwargs)
+
+    return wrapper
+
+
+def CREATE_REQUEST_POST(func):
+    @wraps(func)
+    def wrapper(view_self, request, *args, **kwargs):
+        request.TLPOST = {}
+        for key, item in kwargs.items():
+            request.TLPOST[key] = item
+
+        for key in request.POST:
+            request.TLPOST[key] = request.POST.get(key)
+
+        if request.body:
+            request.TLPOST.update(**json.loads(request.body))
 
         return func(view_self, request, *args, **kwargs)
 
