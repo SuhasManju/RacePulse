@@ -112,3 +112,47 @@ def fill_team_image(year):
 
         with open(f"static/team_img/{t.constructor.pk}.avif", "wb") as f:
             f.write(res.content)
+
+
+def fill_team_small_image(year):
+    BASE_URL = "https://media.formula1.com/content/dam/fom-website/teams/{0}/{1}-logo.png"
+    teams = SeasonConstructor.objects.filter(
+        year=year).select_related("constructor")
+
+    os.makedirs(f"static/team_sm_img", exist_ok=True)
+
+    for t in teams:
+        name = t.constructor.name.lower().split(" ")
+        name = "-".join(name)
+        url = BASE_URL.format(year, name)
+        res = requests.get(url)
+        print(url)
+
+        if res.status_code != 200:
+            print(f"Image not found for: {name}")
+            continue
+
+        with open(f"static/team_sm_img/{t.constructor.pk}.avif", "wb") as f:
+            f.write(res.content)
+
+
+def fill_car_image(year):
+    BASE_URL = "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/{0}/{1}.png"
+    teams = SeasonConstructor.objects.filter(
+        year=year).select_related("constructor")
+
+    os.makedirs(f"static/team_car_image/{year}", exist_ok=True)
+
+    for t in teams:
+        name = t.constructor.name.lower().split(" ")
+        name = "-".join(name)
+        url = BASE_URL.format(year, name)
+        res = requests.get(url)
+        print(url)
+
+        if res.status_code != 200:
+            print(f"Image not found for: {name}")
+            continue
+
+        with open(f"static/team_car_image/{year}/{t.constructor.pk}.avif", "wb") as f:
+            f.write(res.content)

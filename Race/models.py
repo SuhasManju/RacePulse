@@ -72,7 +72,11 @@ class Constructor(models.Model):
 
     @cached_property
     def team_img(self):
-        return static(f"team_img/{self.pk}")
+        return static(f"team_img/{self.pk}.avif")
+
+    @cached_property
+    def team_sm_img(self):
+        return static(f"team_sm_img/{self.pk}.avif")
 
     @cached_property
     def team_color(self):
@@ -169,7 +173,7 @@ class Driver(models.Model):
 
     @cached_property
     def driver_img(self):
-        return static(f"driver_img/{self.pk}")
+        return static(f"driver_img/{self.pk}.avif")
 
 
 class DriverFamilyRelationship(models.Model):
