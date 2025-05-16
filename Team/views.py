@@ -6,7 +6,8 @@ from django.http.response import JsonResponse
 
 
 class TeamView(View):
-    API_RESPONSE = True
+    API_RESPONSE = False
+    template = "teams/index.html"
 
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
@@ -28,4 +29,7 @@ class TeamView(View):
 
         context_dict['teamData'] = team_data
 
-        return JsonResponse(context_dict)
+        if self.API_RESPONSE:
+            return JsonResponse(context_dict)
+
+        return render(request, self.template, context_dict)

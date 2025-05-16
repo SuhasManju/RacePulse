@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3" hidden=true>
+                    Id
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Team
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Points
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in teamData %}
+            <tr class="bg-white hover:bg-gray-50" onclick="window.location.href='/team/{{data.id}}/';">
+                <th scope="row" class="px-6 py-4" hidden=true>
+                    {{data.id}}
+                </th>
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <img src="{{data.teamImg}}" class="w-10 h-10 inline-block mr-2 rounded-full">
+                    {{data.name}}
+                </td>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {{data.points}}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}
