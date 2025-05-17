@@ -684,6 +684,10 @@ class SeasonEntrantChassis(models.Model):
             ("year", "entrant", "constructor", "engine_manufacturer", "chassis"),
         )
 
+    @cached_property
+    def car_image(self):
+        return static(f"team_car_image/{self.year_id}/{self.constructor_id}.avif")
+
 
 class SeasonEntrantConstructor(models.Model):
     pk = models.CompositePrimaryKey(

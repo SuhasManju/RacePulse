@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="m-4 text-5xl text-center">{{teamData.name}}</h1>
+
+<div class="flex w-full h-screen gap-2 p-4 box-border">
+  <!-- Left Side -->
+  <div class="w-1/2 flex flex-col">
+    <!-- Image (centered, full width, maintain aspect) -->
+    <div class="w-full">
+      <img src={{teamData.teamImg}} alt={{teamData.name}} class="w-[30%] h-auto object-contain mx-auto"/>
+    </div>
+    <!-- Text below -->
+    <table class="mt-4 table-auto w-full text-left border-spacing-y-4 border-separate">
+      <colgroup>
+        <col class="w-1/2" />
+        <col class="w-1/2" />
+      </colgroup>
+      <tbody>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">Team</th>
+          <td class="text-gray-600">{{teamData.fullName}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">Base</th>
+          <td class="text-gray-600">{{teamData.country}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">Chassis No.</th>
+          <td class="text-gray-600">{{teamData.chassisNo}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">Engine</th>
+          <td class="text-gray-600">{{teamData.engineSupplier}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">World Championships</th>
+          <td class="text-gray-600">{{teamData.totalChampionShip}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">No. of Wins</th>
+          <td class="text-gray-600">{{teamData.raceWins}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">No. of Podiums</th>
+          <td class="text-gray-600">{{teamData.totalPodiums}}</td>
+        </tr>
+        <tr>
+          <th class="pr-4 text-xl font-semibold align-top">No. of Poles</th>
+          <td class="text-gray-600">{{teamData.polePositions}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Right Side -->
+  <div class="w-1/2 flex flex-row gap-2">
+    {% for driver in driverData %}
+    <div class="relative w-full flex flex-col">
+      <!-- Image -->
+      <img src="{{ driver.driverImg }}" alt="Driver Image" class="w-full h-auto object-contain" />
+      <h3 class="text-6xl" style="color: {{teamData.teamColor}};">{{driver.driverNo}}</h3>
+      <h2 class="text-2xl">{{driver.driverName}}</h2>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+
+{% endblock content %}

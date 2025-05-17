@@ -3,6 +3,8 @@ from django.utils import timezone
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 import json
+from django.conf import settings
+
 
 TEAM_COLOR_DICT = {
     "alpine": "#00A1E8",
@@ -97,3 +99,8 @@ def invert_hex_color(hex_color: str) -> str:
 
     # Convert back to hex and return formatted string
     return "#{:02x}{:02x}{:02x}".format(inverted_r, inverted_g, inverted_b)
+
+
+def retrive_latest_race_pk():
+    from Race.models import RaceData
+    return RaceData.objects.last().race_id
