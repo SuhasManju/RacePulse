@@ -4,12 +4,23 @@
 
 <h1 class="m-4 text-5xl text-center">{{teamData.name}}</h1>
 
-<div class="flex w-full h-screen gap-2 p-4 box-border">
+<div class="flex w-full gap-2 p-4 box-border">
   <!-- Left Side -->
   <div class="w-1/2 flex flex-col">
     <!-- Image (centered, full width, maintain aspect) -->
-    <div class="w-full">
-      <img src={{teamData.teamImg}} alt={{teamData.name}} class="w-[30%] h-auto object-contain mx-auto"/>
+    <div class="flex flex-row w-full">
+      <div class="w-1/2">
+        <img src="{{ teamData.teamImg }}"
+            alt="{{ teamData.name }}"
+            class="w-auto h-auto object-contain"
+            onerror="this.style.display='none';" />
+      </div>
+      <div class="w-1/2 items-center justify-center pt-4">
+        <img src="{{ teamData.carImg }}"
+            alt="Car Image"
+            class="w-auto h-auto object-contain"
+            onerror="this.style.display='none';" />
+      </div>
     </div>
     <!-- Text below -->
     <table class="mt-4 table-auto w-full text-left border-spacing-y-4 border-separate">
@@ -34,22 +45,43 @@
           <th class="pr-4 text-xl font-semibold align-top">Engine</th>
           <td class="text-gray-600">{{teamData.engineSupplier}}</td>
         </tr>
-        <tr>
-          <th class="pr-4 text-xl font-semibold align-top">World Championships</th>
-          <td class="text-gray-600">{{teamData.totalChampionShip}}</td>
-        </tr>
-        <tr>
-          <th class="pr-4 text-xl font-semibold align-top">No. of Wins</th>
-          <td class="text-gray-600">{{teamData.raceWins}}</td>
-        </tr>
+        {% if teamData.totalChampionShip %}
+            <tr>
+              <th class="pr-4 text-xl font-semibold align-top">World Championships</th>
+              <td class="text-gray-600">{{teamData.totalChampionShip}}</td>
+            </tr>
+        {% else %}
+            <tr>
+              <th class="pr-4 text-xl font-semibold align-top">Highest Champion Finish</th>
+              <td class="text-gray-600">{{teamData.bestChampionPos}}</td>
+            </tr>
+        {% endif %}
+        {% if teamData.raceWins %}
+            <tr>
+              <th class="pr-4 text-xl font-semibold align-top">No. of Wins</th>
+              <td class="text-gray-600">{{teamData.raceWins}}</td>
+            </tr>
+        {% else %}
+            <tr>
+              <th class="pr-4 text-xl font-semibold align-top">Highest Race Finish</th>
+              <td class="text-gray-600">{{teamData.highestRaceFinish}}</td>
+            </tr>
+        {% endif %}
         <tr>
           <th class="pr-4 text-xl font-semibold align-top">No. of Podiums</th>
           <td class="text-gray-600">{{teamData.totalPodiums}}</td>
         </tr>
-        <tr>
-          <th class="pr-4 text-xl font-semibold align-top">No. of Poles</th>
-          <td class="text-gray-600">{{teamData.polePositions}}</td>
-        </tr>
+        {% if teamData.polePositions %}
+            <tr>
+              <th class="pr-4 text-xl font-semibold align-top">No. of Poles</th>
+              <td class="text-gray-600">{{teamData.polePositions}}</td>
+            </tr>
+        {% else %}
+            <tr>
+              <th class="pr-4 text-xl font-semibold align-top">Best Starting Position</th>
+              <td class="text-gray-600">{{teamData.highestRaceStart}}</td>
+            </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
@@ -59,7 +91,7 @@
     {% for driver in driverData %}
     <div class="relative w-full flex flex-col">
       <!-- Image -->
-      <img src="{{ driver.driverImg }}" alt="Driver Image" class="w-full h-auto object-contain" />
+      <img src="{{ driver.driverImg }}" alt="Driver Image" class="w-full h-auto object-contain" onerror="this.style.display='none';" />
       <h3 class="text-6xl" style="color: {{teamData.teamColor}};">{{driver.driverNo}}</h3>
       <h2 class="text-2xl">{{driver.driverName}}</h2>
     </div>
@@ -68,5 +100,62 @@
 
 </div>
 
+{{ previousYearData|json_script:"team-data" }}
+
+<div class="w-full flex flex-col m-4">
+    <h3 class="text-xl font-bold mb-4 text-gray-900 text-left">Points Through Years</h3>
+</div>
+<canvas id="myChartTeam"></canvas>
+
+<script>
+  {% include "teams/teams.js" %}
+</script>
+
+{% if cronologyData %}
+<h1 class="text-xl font-bold text-gray-900"> Team Cronology </h1>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3" hidden=true>
+                    Id
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Team
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    From
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    To
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in cronologyData %}
+            <tr class="bg-white  hover:bg-gray-50 {% if data.constructorId == teamData.id %} bg-indigo-50 border-l-4 border-indigo-600 font-semibold text-indigo-800 {% endif %}" onclick="window.location.href='/team/{{data.constructorId}}/';">
+              <th scope="row" class="px-6 py-4" hidden=true>
+                  {{data.constructorId}}
+              </th>
+              <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                  {{data.constructor}}
+              </td>
+              <td class="px-6 py-4 font-medium text-gray-900">
+                  {{data.yearFrom}}
+              </td>
+              <td class="px-6 py-4 font-medium text-gray-900">
+                {% if data.yearTo %}
+                  {{data.yearTo}}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
 
 {% endblock content %}
