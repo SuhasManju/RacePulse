@@ -112,50 +112,91 @@
 </script>
 
 {% if cronologyData %}
-<h1 class="text-xl font-bold text-gray-900"> Team Cronology </h1>
+<h1 class="text-xl font-bold text-gray-900"> Team Cronology</h1>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-                <th scope="col" class="px-6 py-3" hidden=true>
-                    Id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Team
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    From
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    To
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in cronologyData %}
-            <tr class="bg-white  hover:bg-gray-50 {% if data.constructorId == teamData.id %} bg-indigo-50 border-l-4 border-indigo-600 font-semibold text-indigo-800 {% endif %}" onclick="window.location.href='/team/{{data.constructorId}}/';">
-              <th scope="row" class="px-6 py-4" hidden=true>
-                  {{data.constructorId}}
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+              <th scope="col" class="px-6 py-3" hidden=true>
+                  Id
               </th>
-              <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
-                  {{data.constructor}}
-              </td>
-              <td class="px-6 py-4 font-medium text-gray-900">
-                  {{data.yearFrom}}
-              </td>
-              <td class="px-6 py-4 font-medium text-gray-900">
-                {% if data.yearTo %}
-                  {{data.yearTo}}
-                {% else %}
-                  -
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+              <th scope="col" class="px-6 py-3">
+                  Team
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  From
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  To
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for data in cronologyData %}
+          <tr class="bg-white  hover:bg-gray-50 {% if data.constructorId == teamData.id %} bg-indigo-50 border-l-4 border-indigo-600 font-semibold text-indigo-800 {% endif %}" onclick="window.location.href='/team/{{data.constructorId}}/';">
+            <th scope="row" class="px-6 py-4" hidden=true>
+                {{data.constructorId}}
+            </th>
+            <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                {{data.constructor}}
+            </td>
+            <td class="px-6 py-4 font-medium text-gray-900">
+                {{data.yearFrom}}
+            </td>
+            <td class="px-6 py-4 font-medium text-gray-900">
+              {% if data.yearTo %}
+                {{data.yearTo}}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
 </div>
 {% endif %}
+
+<h1 class="text-xl font-bold text-gray-900 mt-4">Previous Drivers</h1>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3" hidden=true>
+                Id
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Driver
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Years
+            </th>
+            <th scope="col" class="px-6 py-3">
+                No. of Races
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in previousDriverData %}
+        <tr class="bg-white  hover:bg-gray-50">
+          <th scope="row" class="px-6 py-4" hidden=true>
+              {{data.driverId}}
+          </th>
+          <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+              {{data.name}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.years}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.noRounds}}
+          </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 {% endblock content %}

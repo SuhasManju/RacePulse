@@ -5,6 +5,7 @@ from RacePulse.utils import CREATE_REQUEST, trim_decimal_zeros
 from django.http.response import JsonResponse
 from django.conf import settings
 from django.db.models import Subquery
+from collections import defaultdict
 
 class TeamView(View):
     API_RESPONSE = False
@@ -118,6 +119,32 @@ class TeamDetailedView(View):
             }
             team_cronology_list.append(temp)
         context_dict['cronologyData'] = team_cronology_list
+
+        team_driver_qs = SeasonEntrantDriver.objects.filter(
+            constructor_id=team_id, test_driver=False).select_related("driver").order_by("-year")
+        team_driver_list = []
+        team_driver_year = defaultdict(list)
+        team_driver_rounds = defaultdict(int)
+        team_driver_dict = defaultdict()
+
+        for team_driver in team_driver_qs:
+            team_driver_year[team_driver.driver_id].append(
+                str(team_driver.year_id))
+            team_driver_rounds[team_driver.driver_id] += len(
+                team_driver.rounds.split(";"))
+            team_driver_dict[team_driver.driver_id] = team_driver.driver.name
+
+        for driver in team_driver_dict.keys():
+            temp = {
+                "driverId": driver,
+                "name": team_driver_dict[driver],
+                "years": ", ".join(team_driver_year[driver]),
+                "noRounds": team_driver_rounds[driver],
+            }
+            team_driver_list.append(temp)
+
+        context_dict["previousDriverData"] = team_driver_list
+
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)
