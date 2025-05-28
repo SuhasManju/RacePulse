@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex mt-4">
+    <div class="w-1/2">
+        <img src="{{driverData.driverImg}}" class="w-[70%] h-auto" onerror="this.style.display='none';"/>
+        <h3 class="text-6xl">{{driverData.driverNumber}}</h3>
+        <h4 class="text-3xl">{{driverData.name}}</h4>
+    </div>
+
+    <div class="w-1/2 ml-6">
+        <table class="mt-4 table-auto w-full text-left border-spacing-y-4 border-separate">
+            <colgroup>
+                <col class="w-1/2" />
+                <col class="w-1/2" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Current/ Last Team</th>
+                    <td class="text-gray-600">{{driverData.currentTeam}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Full Name</th>
+                    <td class="text-gray-600">{{driverData.fullName}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Birth Place</th>
+                    <td class="text-gray-600">{{driverData.birthPlace}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Date of Birth</th>
+                    <td class="text-gray-600">{{driverData.dob}} ({{driverData.age}})</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Nationality</th>
+                    <td class="text-gray-600">{{driverData.nationality}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">No. of Races</th>
+                    <td class="text-gray-600">{{driverData.noOfRaces}}</td>
+                </tr>
+                {% if driverData.noOfWins %}
+                    <tr>
+                        <th class="pr-4 text-xl font-semibold align-top">No. of Wins</th>
+                        <td class="text-gray-600">{{driverData.noOfWins}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <th class="pr-4 text-xl font-semibold align-top">Highest Race Finish</th>
+                        <td class="text-gray-600">{{driverData.highestPosFinish}}</td>
+                    </tr>
+                {% endif %}
+                {% if driverData.noOfPoles %}
+                    <tr>
+                        <th class="pr-4 text-xl font-semibold align-top">No. of Poles</th>
+                        <td class="text-gray-600">{{driverData.noOfPoles}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <th class="pr-4 text-xl font-semibold align-top">Highest Race Start</th>
+                        <td class="text-gray-600">{{driverData.highestPosStart}}</td>
+                    </tr>
+                {% endif %}
+                {% if driverData.noOfChampionShip %}
+                    <tr>
+                        <th class="pr-4 text-xl font-semibold align-top">No. of ChampionShips</th>
+                        <td class="text-gray-600">{{driverData.noOfChampionShip}}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <th class="pr-4 text-xl font-semibold align-top">Highest ChampionShip Position</th>
+                        <td class="text-gray-600">{% if driverData.highestChampionshipPos %}{{driverData.highestChampionshipPos}}{% else %}-{% endif %}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">No. of Podiums</th>
+                    <td class="text-gray-600">{{driverData.noOfPodiums}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

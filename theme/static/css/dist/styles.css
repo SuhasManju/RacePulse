@@ -286,6 +286,9 @@
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
+  .ml-6 {
+    margin-left: calc(var(--spacing) * 6);
+  }
   .box-border {
     box-sizing: border-box;
   }
@@ -348,6 +351,9 @@
   }
   .w-44 {
     width: calc(var(--spacing) * 44);
+  }
+  .w-\[70\%\] {
+    width: 70%;
   }
   .w-auto {
     width: auto;
