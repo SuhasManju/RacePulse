@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse
+from django.db.models import Count, Min, Q
 from Race.models import *
 from RacePulse.utils import CREATE_REQUEST, trim_decimal_zeros
 from dateutil.relativedelta import relativedelta
@@ -85,8 +86,26 @@ class DriverDetailedView(View):
             driver_standing_list.append(temp)
         context_dict['previousYearData'] = driver_standing_list
 
+        race_annotate_dict = {
+            "total_wins": Count("position_number", filter=Q(position_number=1)),
+            "total_podiums": Count("position_number", filter=Q(position_number__gte=1, position_number__lte=3)),
+            "best_result": Min("position_number"),
+        }
+        quali_annotate_dict = {
+            "total_poles": Count("position_number", filter=Q(position_number=1)),
+            "best_quali_pos": Min("position_number"),
+        }
+
         driver_team_history_qs = SeasonEntrantDriver.objects.filter(
             driver_id=driver_id, test_driver=False).order_by("-year").select_related("constructor")
+        driver_race_history_qs = RaceData.objects.filter(driver_id=driver_id, type__in=[RaceData.RACE_RESULT]
+                                                         ).values("constructor_id").annotate(**race_annotate_dict)
+        driver_quali_history_qs = RaceData.objects.filter(driver_id=driver_id, type__in=[RaceData.QUALIFYING_RESULT]
+                                                          ).values("constructor_id").annotate(**quali_annotate_dict)
+        driver_race_history_dict = {
+            team['constructor_id']: team for team in driver_race_history_qs}
+        driver_quali_history_dict = {
+            team['constructor_id']: team for team in driver_quali_history_qs}
         driver_team_history_list = []
         team_dict = defaultdict()
         team_year_dict = defaultdict(list)
@@ -99,11 +118,18 @@ class DriverDetailedView(View):
                 team.rounds.split(";"))
 
         for team_id in team_dict.keys():
+            team_race_dict = driver_race_history_dict[team_id]
+            team_quali_dict = driver_quali_history_dict[team_id]
             temp = {
                 "teamId": team_id,
                 "name": team_dict[team_id],
                 "years": ", ".join(team_year_dict[team_id]),
                 "noRounds": team_rounds_dict[team_id],
+                "noWins": team_race_dict['total_wins'],
+                "totalPodiums": team_race_dict['total_podiums'],
+                "bestResult": team_race_dict['best_result'],
+                "noPoles": team_quali_dict['total_poles'],
+                "bestQualiPos": team_quali_dict['best_quali_pos'],
             }
             driver_team_history_list.append(temp)
         context_dict["driverTeamHistory"] = driver_team_history_list
