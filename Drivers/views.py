@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from Race.models import *
 from RacePulse.utils import CREATE_REQUEST, trim_decimal_zeros
 from dateutil.relativedelta import relativedelta
+from collections import defaultdict
 
 
 class DriverView(View):
@@ -71,6 +72,41 @@ class DriverDetailedView(View):
             "driverImg": driver.driver_img,
         }
         context_dict['driverData'] = driver_data
+
+        driver_standing_qs = SeasonDriverStanding.objects.filter(
+            driver_id=driver_id).order_by("year_id")
+        driver_standing_list = []
+        for d in driver_standing_qs:
+            temp = {
+                "position": d.position_number,
+                "points": d.points,
+                "year": d.year_id,
+            }
+            driver_standing_list.append(temp)
+        context_dict['previousYearData'] = driver_standing_list
+
+        driver_team_history_qs = SeasonEntrantDriver.objects.filter(
+            driver_id=driver_id, test_driver=False).order_by("-year").select_related("constructor")
+        driver_team_history_list = []
+        team_dict = defaultdict()
+        team_year_dict = defaultdict(list)
+        team_rounds_dict = defaultdict(int)
+
+        for team in driver_team_history_qs:
+            team_dict[team.constructor_id] = team.constructor.name
+            team_year_dict[team.constructor_id].append(str(team.year_id))
+            team_rounds_dict[team.constructor_id] += len(
+                team.rounds.split(";"))
+
+        for team_id in team_dict.keys():
+            temp = {
+                "teamId": team_id,
+                "name": team_dict[team_id],
+                "years": ", ".join(team_year_dict[team_id]),
+                "noRounds": team_rounds_dict[team_id],
+            }
+            driver_team_history_list.append(temp)
+        context_dict["driverTeamHistory"] = driver_team_history_list
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)

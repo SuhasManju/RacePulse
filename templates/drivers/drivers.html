@@ -68,7 +68,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <th class="pr-4 text-xl font-semibold align-top">Highest ChampionShip Position</th>
+                        <th class="pr-4 text-xl font-semibold align-top">Highest Championship Finish</th>
                         <td class="text-gray-600">{% if driverData.highestChampionshipPos %}{{driverData.highestChampionshipPos}}{% else %}-{% endif %}</td>
                     </tr>
                 {% endif %}
@@ -80,4 +80,58 @@
         </table>
     </div>
 </div>
+
+{{ previousYearData|json_script:"driver-data" }}
+
+<div class="w-full flex flex-col m-4">
+    <h3 class="text-xl font-bold mb-4 text-gray-900 text-left">Points Through Years</h3>
+</div>
+<canvas id="myChartDriver"></canvas>
+
+<script>
+    {% include "drivers/drivers.js" %}
+</script>
+
+
+<h1 class="text-xl font-bold text-gray-900 mt-4">Driver Team History</h1>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3" hidden=true>
+                Id
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Team
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Years
+            </th>
+            <th scope="col" class="px-6 py-3">
+                No. of Races
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in driverTeamHistory %}
+        <tr class="bg-white  hover:bg-gray-50">
+          <th scope="row" class="px-6 py-4" hidden=true>
+              {{t.teamId}}
+          </th>
+          <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+              {{t.name}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{t.years}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{t.noRounds}}
+          </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
 {% endblock content %}
