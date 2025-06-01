@@ -195,7 +195,7 @@
     </thead>
     <tbody>
         {% for data in previousDriverData %}
-        <tr class="bg-white  hover:bg-gray-50">
+        <tr class="bg-white  hover:bg-gray-50" onclick="window.location.href='/drivers/{{data.driverId}}/';">
           <th scope="row" class="px-6 py-4" hidden=true>
               {{data.driverId}}
           </th>

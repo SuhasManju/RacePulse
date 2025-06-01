@@ -49,14 +49,18 @@ class DriverDetailedView(View):
             "country_of_birth_country", "nationality_country").get(pk=driver_id)
         current_team = RaceData.objects.filter(
             driver_id=driver_id).order_by("-race_id").select_related("constructor").first()
+
         today = datetime.now()
+        if driver.date_of_death:
+            today = driver.date_of_death
         age_diff = relativedelta(today, driver.date_of_birth)
 
         driver_data = {
             "id": driver_id,
             "name": driver.name,
             "fullName": driver.full_name,
-            "dob": driver.date_of_birth,
+            "birthDate": driver.date_of_birth,
+            "deathDate": driver.date_of_death,
             "age": f"{age_diff.years} Years and {age_diff.months} Months",
             "birthPlace": driver.place_of_birth + ", " + driver.country_of_birth_country.name,
             "nationality": driver.nationality_country.name,
@@ -66,7 +70,7 @@ class DriverDetailedView(View):
             "highestChampionshipPos": driver.best_championship_position,
             "highestPosFinish": driver.best_race_result,
             "highestPosStart": driver.best_starting_grid_position,
-            "driverNumber": driver.permanent_number,
+            "driverNumber": driver.permanent_number if driver.permanent_number else current_team.driver_number,
             "noOfPodiums": driver.total_podiums,
             "currentTeam": current_team.constructor.name,
             "noOfRaces": driver.total_race_starts,
@@ -102,6 +106,7 @@ class DriverDetailedView(View):
                                                          ).values("constructor_id").annotate(**race_annotate_dict)
         driver_quali_history_qs = RaceData.objects.filter(driver_id=driver_id, type__in=[RaceData.QUALIFYING_RESULT]
                                                           ).values("constructor_id").annotate(**quali_annotate_dict)
+
         driver_race_history_dict = {
             team['constructor_id']: team for team in driver_race_history_qs}
         driver_quali_history_dict = {
@@ -133,6 +138,21 @@ class DriverDetailedView(View):
             }
             driver_team_history_list.append(temp)
         context_dict["driverTeamHistory"] = driver_team_history_list
+
+        family_other_drivers_qs = DriverFamilyRelationship.objects.filter(
+            driver_id=driver_id).select_related("other_driver")
+        family_other_drivers_list = []
+
+        for other_family in family_other_drivers_qs:
+            temp = {
+                "driverId": other_family.other_driver_id,
+                "name": other_family.other_driver.name,
+                "relation": other_family.driver_relation,
+            }
+            family_other_drivers_list.append(temp)
+
+        print(family_other_drivers_list)
+        context_dict['familyOtherDrivers'] = family_other_drivers_list
 
         if self.API_RESPONSE:
             return JsonResponse(context_dict)

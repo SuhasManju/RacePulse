@@ -29,8 +29,14 @@
                 </tr>
                 <tr>
                     <th class="pr-4 text-xl font-semibold align-top">Date of Birth</th>
-                    <td class="text-gray-600">{{driverData.dob}} ({{driverData.age}})</td>
+                    <td class="text-gray-600">{{driverData.birthDate}} {% if driverData.deathDate %}{% else %}({{driverData.age}}) {% endif %}</td>
                 </tr>
+                {% if driverData.deathDate %}
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Date of Death</th>
+                    <td class="text-gray-600">{{driverData.deathDate}} ({{driverData.age}})</td>
+                </tr>
+                {% endif %}
                 <tr>
                     <th class="pr-4 text-xl font-semibold align-top">Nationality</th>
                     <td class="text-gray-600">{{driverData.nationality}}</td>
@@ -130,7 +136,7 @@
     </thead>
     <tbody>
         {% for t in driverTeamHistory %}
-        <tr class="bg-white  hover:bg-gray-50">
+        <tr class="bg-white  hover:bg-gray-50" onclick="window.location.href='/team/{{t.teamId}}/';">
           <th scope="row" class="px-6 py-4" hidden=true>
               {{t.teamId}}
           </th>
@@ -150,7 +156,11 @@
               {{t.totalPodiums}}
           </td>
           <td class="px-6 py-4 font-medium text-gray-900">
+            {% if t.bestResult %}
               {{t.bestResult}}
+            {% else %}
+              -
+            {% endif %}
           </td>
           <td class="px-6 py-4 font-medium text-gray-900">
               {{t.noPoles}}
@@ -163,5 +173,41 @@
     </tbody>
   </table>
 </div>
+
+{% if familyOtherDrivers %}
+<h1 class="text-xl font-bold text-gray-900 mt-4">Family Other Drivers</h1>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3" hidden=true>
+                Id
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Name
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Relation
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in familyOtherDrivers %}
+        <tr class="bg-white  hover:bg-gray-50" onclick="window.location.href='/drivers/{{data.driverId}}/';">
+          <th scope="row" class="px-6 py-4" hidden=true>
+              {{data.driverId}}
+          </th>
+          <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+              {{data.name}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.relation}}
+          </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
 
 {% endblock content %}

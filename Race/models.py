@@ -195,6 +195,12 @@ class DriverFamilyRelationship(models.Model):
             ("driver", "other_driver", "type"),
         )
 
+    @cached_property
+    def driver_relation(self):
+        relation = self.type.replace("_", " ")
+        relation.replace("in law", "in-law")
+        return relation.title()
+
 
 class Engine(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
