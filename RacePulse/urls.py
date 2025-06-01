@@ -24,5 +24,6 @@ urlpatterns = [
     path("standing/", include("Standing.urls")),
     path("team/", include("Team.urls")),
     path("drivers/", include("Drivers.urls")),
+    path("circuits/", include("Circuit.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
