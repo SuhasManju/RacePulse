@@ -176,6 +176,21 @@
             <th scope="col" class="px-6 py-3">
                 No. of Races
             </th>
+            <th scope="col" class="px-6 py-3">
+                No. of Wins
+            </th>
+            <th scope="col" class="px-6 py-3">
+                No. of Podiums
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Best Finish
+            </th>
+            <th scope="col" class="px-6 py-3">
+                No. of Poles
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Best Start
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -192,6 +207,25 @@
           </td>
           <td class="px-6 py-4 font-medium text-gray-900">
               {{data.noRounds}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.noWins}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.totalPodiums}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+            {% if data.bestResult %}
+              {{data.bestResult}}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.noPoles}}
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900">
+              {{data.bestQualiPos}}
           </td>
         </tr>
         {% endfor %}
