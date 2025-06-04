@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="flex mt-4">
+    <div class="w-1/2">
+        <img src="{{circuitData.circuitImg}}"/ onerror="this.style.display='none';">
+    </div>
+    <div class="w-1/2">
+        <table class="mt-4 table-auto w-full text-left border-spacing-y-4 border-separate">
+            <colgroup>
+                <col class="w-1/2" />
+                <col class="w-1/2" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Name</th>
+                    <td class="text-gray-600">{{circuitData.name}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Full Name</th>
+                    <td class="text-gray-600">{{circuitData.fullName}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Place</th>
+                    <td class="text-gray-600">{{circuitData.place}}</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Total Races Held</th>
+                    <td class="text-gray-600">{{circuitData.totalRacesHeld}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="map" class="h-[500px] w-full">
+        </div>
+    </div>
+</div>
+
+<script>
+    {% include "circuits/circuit.js" %}
+</script>
+
+{% endblock content %}

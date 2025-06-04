@@ -44,6 +44,10 @@ class Circuit(models.Model):
     def circuit_image(self):
         return static(f"circuit_img/{self.pk}.avif")
 
+    @cached_property
+    def cor_ordinates(self):
+        return [float(self.latitude), float(self.longitude)]
+
 
 class Constructor(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
