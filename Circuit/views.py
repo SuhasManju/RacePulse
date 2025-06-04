@@ -3,6 +3,7 @@ from Race.models import *
 from django.views import View
 from django.http import JsonResponse
 from RacePulse.utils import CREATE_REQUEST
+from collections import defaultdict
 
 
 class CircuitView(View):
@@ -54,5 +55,41 @@ class CircuitDetailedView(View):
             "circuitImg": circuit.circuit_image,
         }
         context_dict['circuitData'] = circuit_data
+
+        previous_year_qs = RaceData.objects.filter(type__in=[RaceData.RACE_RESULT],
+                                                   race__circuit_id=circuit_id, position_number=1)
+        previous_year_qs = previous_year_qs.select_related(
+            "constructor", "driver", "race")
+        previous_year_qs = previous_year_qs.order_by("-race__year_id")
+        previous_year_list = []
+        max_wins_drivers_dict = defaultdict(int)
+        max_wins_teams_dict = defaultdict(int)
+
+        for race_data in previous_year_qs:
+            temp = {
+                "raceId": race_data.race_id,
+                "year": race_data.race.year_id,
+                "round": race_data.race.round,
+                "driver": race_data.driver.name,
+                "driverId": race_data.driver_id,
+                "team": race_data.constructor.name,
+                "teamId": race_data.constructor_id,
+            }
+            max_wins_drivers_dict[race_data.driver.name] += 1
+            max_wins_teams_dict[race_data.constructor.name] += 1
+
+            previous_year_list.append(temp)
+
+        max_win_driver, max_win_driver_count = max(
+            max_wins_drivers_dict.items(), key=lambda x: x[1])
+        max_win_team, max_win_team_count = max(
+            max_wins_teams_dict.items(), key=lambda x: x[1])
+
+        circuit_data['maxWinDriver'] = max_win_driver
+        circuit_data['maxWinDriverCount'] = max_win_driver_count
+        circuit_data['maxWinTeam'] = max_win_team
+        circuit_data['maxWinTeamCount'] = max_win_team_count
+
+        context_dict['previousYearData'] = previous_year_list
 
         return render(request, self.TEMPLATE, context_dict)

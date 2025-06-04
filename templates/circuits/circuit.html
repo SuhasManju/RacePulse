@@ -29,12 +29,62 @@
                     <th class="pr-4 text-xl font-semibold align-top">Total Races Held</th>
                     <td class="text-gray-600">{{circuitData.totalRacesHeld}}</td>
                 </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Max Wins Driver</th>
+                    <td class="text-gray-600">{{circuitData.maxWinDriver}} ({{circuitData.maxWinDriverCount}} Wins)</td>
+                </tr>
+                <tr>
+                    <th class="pr-4 text-xl font-semibold align-top">Max Wins Team</th>
+                    <td class="text-gray-600">{{circuitData.maxWinTeam}} ({{circuitData.maxWinTeamCount}} Wins)</td>
+                </tr>
             </tbody>
         </table>
         <div id="map" class="h-[500px] w-full">
         </div>
     </div>
 </div>
+
+<h1 class="text-xl font-bold text-gray-900 mt-4">Previous Year Winners</h1>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3" hidden=true>
+                    Id
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Year
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Driver
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Team
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in previousYearData %}
+            <tr class="bg-white  hover:bg-gray-50" onclick="window.location.href='/race/{{t.year}}/{{t.round}}';">
+                <th scope="row" class="px-6 py-4" hidden=true>
+                    {{t.raceId}}
+                </th>
+                <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                    {{t.year}}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                    {{t.driver}}
+                </td>
+                <td class="px-6 py-4  font-medium text-gray-900 whitespace-nowrap ">
+                    {{t.team}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 <script>
     {% include "circuits/circuit.js" %}
