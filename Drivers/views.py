@@ -151,7 +151,6 @@ class DriverDetailedView(View):
             }
             family_other_drivers_list.append(temp)
 
-        print(family_other_drivers_list)
         context_dict['familyOtherDrivers'] = family_other_drivers_list
 
         if self.API_RESPONSE:

@@ -49,3 +49,17 @@ searchElement.addEventListener("input", async function (event) {
         dropdown.classList.remove("hidden");
     }
 });
+
+document.addEventListener("keydown", function (e) {
+    // Check if Ctrl + K is pressed
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+
+        const searchInput = document.getElementById("searchItem");
+
+        // Show and focus the input
+        searchInput.style.display = "block";
+        searchInput.focus();
+    }
+});
+
