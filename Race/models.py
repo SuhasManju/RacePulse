@@ -48,6 +48,10 @@ class Circuit(models.Model):
     def cor_ordinates(self):
         return [float(self.latitude), float(self.longitude)]
 
+    @cached_property
+    def circuit_url(self):
+        return f"/circuits/{self.pk}/"
+
 
 class Constructor(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
@@ -85,6 +89,10 @@ class Constructor(models.Model):
     @cached_property
     def team_color(self):
         return TEAM_COLOR_DICT.get(self.pk)
+
+    @cached_property
+    def team_url(self):
+        return f"/team/{self.pk}/"
 
 
 class ConstructorChronology(models.Model):
@@ -178,6 +186,10 @@ class Driver(models.Model):
     @cached_property
     def driver_img(self):
         return static(f"driver_img/{self.pk}.avif")
+
+    @cached_property
+    def driver_url(self):
+        return f"/drivers/{self.pk}/"
 
 
 class DriverFamilyRelationship(models.Model):

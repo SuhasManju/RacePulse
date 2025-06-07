@@ -12,9 +12,6 @@
     {% tailwind_css %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- hyperscript -->
-    <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
-
     <!-- HTMX -->
     <script src={% static "htmx.min.js" %}></script>
 
@@ -41,5 +38,8 @@
     </footer>
 
     {% block scripts %}{% endblock %}
+    <script>
+        {% include "base.js" %}
+    </script>
 </body>
 </html>
