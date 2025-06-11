@@ -43,6 +43,7 @@ class SearchView(APIView):
         circuit_list = []
         circuit_qs = Q(full_name__icontains=search_item)
         circuit_qs |= Q(previous_names__icontains=search_item)
+        circuit_qs |= Q(country__name__icontains=search_item)
         circuits = Circuit.objects.filter(circuit_qs)[:6]
 
         for circuit in circuits:
