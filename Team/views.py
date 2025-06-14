@@ -132,7 +132,7 @@ class TeamDetailedView(View):
         }
 
         team_driver_qs = SeasonEntrantDriver.objects.filter(
-            constructor_id=team_id, test_driver=False).select_related("driver").order_by("-year")
+            constructor_id=team_id).select_related("driver").order_by("-year")
         team_driver_race_qs = RaceData.objects.filter(
             type__in=[RaceData.RACE_RESULT], constructor_id=team_id).values("driver_id").annotate(**race_annotate_dict)
         team_driver_quali_qs = RaceData.objects.filter(
@@ -154,8 +154,13 @@ class TeamDetailedView(View):
             team_driver_dict[team_driver.driver_id] = team_driver.driver.name
 
         for driver in team_driver_dict.keys():
-            driver_race_dict = team_driver_race_dict[driver]
-            driver_quali_dict = team_driver_quali_dict[driver]
+            driver_race_dict = team_driver_race_dict.get(driver)
+            driver_quali_dict = team_driver_quali_dict.get(driver)
+
+            # there are years where the driver would have worked in the team as a test driver
+            if not driver_race_dict:
+                continue
+
             temp = {
                 "driverId": driver,
                 "name": team_driver_dict[driver],

@@ -101,7 +101,7 @@ class DriverDetailedView(View):
         }
 
         driver_team_history_qs = SeasonEntrantDriver.objects.filter(
-            driver_id=driver_id, test_driver=False).order_by("-year").select_related("constructor")
+            driver_id=driver_id).order_by("-year").select_related("constructor")
         driver_race_history_qs = RaceData.objects.filter(driver_id=driver_id, type__in=[RaceData.RACE_RESULT]
                                                          ).values("constructor_id").annotate(**race_annotate_dict)
         driver_quali_history_qs = RaceData.objects.filter(driver_id=driver_id, type__in=[RaceData.QUALIFYING_RESULT]
@@ -123,8 +123,13 @@ class DriverDetailedView(View):
                 team.rounds.split(";"))
 
         for team_id in team_dict.keys():
-            team_race_dict = driver_race_history_dict[team_id]
-            team_quali_dict = driver_quali_history_dict[team_id]
+            team_race_dict = driver_race_history_dict.get(team_id)
+            team_quali_dict = driver_quali_history_dict.get(team_id)
+
+            # There is a years where the driver would have worked in the team as test driver and raced in the actual season
+            if not team_race_dict:
+                continue
+
             temp = {
                 "teamId": team_id,
                 "name": team_dict[team_id],
