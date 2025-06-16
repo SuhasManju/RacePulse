@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from RacePulse.views import SearchView
+from RacePulse.views import SearchView, HomeView
 
 urlpatterns = [
     path("e@am!nat!0n/", admin.site.urls),
@@ -10,5 +10,6 @@ urlpatterns = [
     path("drivers/", include("Drivers.urls")),
     path("circuits/", include("Circuit.urls")),
     path("search/", SearchView.as_view(), name="webSearch"),
+    path("", HomeView.as_view(), name="home"),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
