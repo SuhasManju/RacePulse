@@ -63,7 +63,7 @@ class SearchView(APIView):
 
 
 class HomeView(View):
-    API_RESPONSE = True
+    API_RESPONSE = False
     TEMPLATE = "index.html"
 
     @CREATE_REQUEST
@@ -77,7 +77,7 @@ class HomeView(View):
         latest_result_qs = RaceData.objects.filter(race_id=latest_race_pk,
                                                    type=RaceData.RACE_RESULT).order_by(
             OrderBy(F("position_number"), nulls_last=True)).values_list(
-                "position_number", "driver__name", "constructor__name")[:3]
+                "position_number", "driver__name", "constructor__name", "race_gap")[:3]
 
         driver_standing_qs = SeasonDriverStanding.objects.filter(
             year_id=settings.CURRENT_YEAR).order_by("position_number").select_related("driver")
@@ -88,11 +88,12 @@ class HomeView(View):
             "grand_prix", "circuit").order_by("pk")
 
         last_race_result = []
-        for position, driver_name, team_name in latest_result_qs:
+        for position, driver_name, team_name, race_gap in latest_result_qs:
             temp = {
                 "position": position,
                 "driverName": driver_name,
                 "teamName": team_name,
+                "gap": race_gap,
             }
             last_race_result.append(temp)
 
@@ -117,6 +118,7 @@ class HomeView(View):
             if latest_race_pk == race.pk:
                 last_race = {
                     "round": race.round,
+                    "year": race.year_id,
                     "name": race.grand_prix.name,
                 }
 

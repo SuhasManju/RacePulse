@@ -1,1 +1,47 @@
 {% extends "base.html" %}
+
+{% block content %}
+<div class="flex w-full mt-4"> <!-- Horizontal split -->
+    <!-- Left section -->
+    <div class="w-1/2 p-4">
+        <!-- Title and button in one row -->
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-3xl text-gray-700">Last Race Result</h1>
+            <button class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600">
+                <a href="race/{{lastRaceResult.year}}/{{lastRaceResult.round}}/">View Result</a>
+            </button>
+        </div>
+
+        <!-- Table below -->
+        <div class="overflow-hidden rounded-t-lg">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2">Position</th>
+                        <th class="px-4 py-2">Driver</th>
+                        <th class="px-4 py-2">Team</th>
+                        <th class="px-4 py-2">Gap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for driver in lastRaceResult.standings %}
+                    <tr>
+                        <td class="px-4 py-2">{{ forloop.counter }}</td>
+                        <td class="px-4 py-2">{{ driver.driverName }}</td>
+                        <td class="px-4 py-2">{{ driver.teamName }}</td>
+                        <td class="px-4 py-2">
+                            {% if driver.gap %}{{ driver.gap }}{% else %}-{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Right section -->
+    <div class="w-1/2 flex items-center justify-center p-4">
+        <h1 class="text-3xl text-gray-700">Next Race</h1>
+    </div>
+</div>
+{% endblock content %}
