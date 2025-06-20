@@ -134,6 +134,7 @@ class HomeView(View):
         driver_standing_list = []
         for standing in driver_standing_qs:
             temp = {
+                "pk": standing.driver.pk,
                 "name": standing.driver.name,
                 "img": standing.driver.driver_img,
                 "points": trim_decimal_zeros(standing.points),
@@ -144,6 +145,7 @@ class HomeView(View):
         team_standing_list = []
         for standing in team_standing_qs:
             temp = {
+                "pk": standing.constructor.pk,
                 "name": standing.constructor.name,
                 "img": standing.constructor.team_sm_img,
                 "points": trim_decimal_zeros(standing.points),

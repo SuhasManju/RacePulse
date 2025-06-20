@@ -24,6 +24,7 @@ class DriverView(View):
             temp = {
                 "id": driver.driver_id,
                 "name": driver.driver.name,
+                "img": driver.driver.driver_img,
                 "points": trim_decimal_zeros(driver.points),
             }
             driver_list.append(temp)
@@ -117,6 +118,8 @@ class DriverDetailedView(View):
         team_rounds_dict = defaultdict(int)
 
         for team in driver_team_history_qs:
+            if team.test_driver:
+                continue
             team_dict[team.constructor_id] = team.constructor.name
             team_year_dict[team.constructor_id].append(str(team.year_id))
             team_rounds_dict[team.constructor_id] += len(
