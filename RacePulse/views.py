@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.views import View
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.db.models import Q, Subquery, F, OrderBy
+from django.db.models import Q, F, OrderBy
 from django.utils import timezone
 from django.conf import settings
 from RacePulse.utils import CREATE_REQUEST
@@ -84,8 +84,8 @@ class HomeView(View):
         team_standing_qs = SeasonConstructorStanding.objects.filter(
             year_id=settings.CURRENT_YEAR).order_by("position_number").select_related("constructor")
 
-        race_qs = Race.objects.filter(year_id=settings.CURRENT_YEAR).select_related(
-            "grand_prix", "circuit").order_by("pk")
+        race_qs = Race.objects.filter(
+            year_id=settings.CURRENT_YEAR).select_related("circuit").order_by("pk")
 
         last_race_result = []
         for position, driver_name, team_name, race_gap in latest_result_qs:
@@ -103,23 +103,25 @@ class HomeView(View):
         for race in race_qs:
             temp = {
                 "round": race.round,
-                "name": race.grand_prix.name,
+                "name": race.official_name,
                 "co_ordinates": race.circuit.cor_ordinates,
                 "date": race.event_date,
             }
 
             if not next_race and race.race_time > current_time:
                 next_race = {
-                    "name": race.grand_prix.name,
+                    "name": race.official_name,
                     "nextEvent": race.next_event[0],
                     "nextEventType": race.next_event[1],
+                    "round": race.round,
+                    "year": race.year_id,
                 }
 
             if latest_race_pk == race.pk:
                 last_race = {
                     "round": race.round,
                     "year": race.year_id,
-                    "name": race.grand_prix.name,
+                    "name": race.official_name,
                 }
 
             races_list.append(temp)
