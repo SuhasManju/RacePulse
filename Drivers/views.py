@@ -51,6 +51,10 @@ class DriverDetailedView(View):
         current_team = RaceData.objects.filter(
             driver_id=driver_id).order_by("-race_id").select_related("constructor").first()
 
+        # if he was not part of any team, there is no reason to show him
+        if not current_team:
+            return render(request, self.TEMPLATE, context_dict)
+
         today = datetime.now()
         if driver.date_of_death:
             today = driver.date_of_death
@@ -118,16 +122,18 @@ class DriverDetailedView(View):
         team_rounds_dict = defaultdict(int)
 
         for team in driver_team_history_qs:
-            if team.test_driver:
+            # Removing drivers who have not for the team in that season
+            no_of_races = len(list(filter(None, team.rounds.split(";"))))
+            if not no_of_races:
                 continue
+
             team_dict[team.constructor_id] = team.constructor.name
             team_year_dict[team.constructor_id].append(str(team.year_id))
-            team_rounds_dict[team.constructor_id] += len(
-                team.rounds.split(";"))
+            team_rounds_dict[team.constructor_id] += no_of_races
 
         for team_id in team_dict.keys():
-            team_race_dict = driver_race_history_dict.get(team_id)
-            team_quali_dict = driver_quali_history_dict.get(team_id)
+            team_race_dict = driver_race_history_dict.get(team_id, {})
+            team_quali_dict = driver_quali_history_dict.get(team_id, {})
 
             # There is a years where the driver would have worked in the team as test driver and raced in the actual season
             if not team_race_dict:
@@ -138,11 +144,11 @@ class DriverDetailedView(View):
                 "name": team_dict[team_id],
                 "years": ", ".join(team_year_dict[team_id]),
                 "noRounds": team_rounds_dict[team_id],
-                "noWins": team_race_dict['total_wins'],
-                "totalPodiums": team_race_dict['total_podiums'],
-                "bestResult": team_race_dict['best_result'],
-                "noPoles": team_quali_dict['total_poles'],
-                "bestQualiPos": team_quali_dict['best_quali_pos'],
+                "noWins": team_race_dict.get('total_wins', 0),
+                "totalPodiums": team_race_dict.get('total_podiums', 0),
+                "bestResult": team_race_dict.get('best_result'),
+                "noPoles": team_quali_dict.get('total_poles', 0),
+                "bestQualiPos": team_quali_dict.get('best_quali_pos'),
             }
             driver_team_history_list.append(temp)
         context_dict["driverTeamHistory"] = driver_team_history_list

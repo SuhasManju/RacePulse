@@ -154,8 +154,8 @@ class TeamDetailedView(View):
             team_driver_dict[team_driver.driver_id] = team_driver.driver.name
 
         for driver in team_driver_dict.keys():
-            driver_race_dict = team_driver_race_dict.get(driver)
-            driver_quali_dict = team_driver_quali_dict.get(driver)
+            driver_race_dict = team_driver_race_dict.get(driver, {})
+            driver_quali_dict = team_driver_quali_dict.get(driver, {})
 
             # there are years where the driver would have worked in the team as a test driver
             if not driver_race_dict:
@@ -166,11 +166,11 @@ class TeamDetailedView(View):
                 "name": team_driver_dict[driver],
                 "years": ", ".join(team_driver_year[driver]),
                 "noRounds": team_driver_rounds[driver],
-                "noWins": driver_race_dict['total_wins'],
-                "totalPodiums": driver_race_dict['total_podiums'],
-                "bestResult": driver_race_dict['best_result'],
-                "noPoles": driver_quali_dict['total_poles'],
-                "bestQualiPos": driver_quali_dict['best_quali_pos'],
+                "noWins": driver_race_dict.get('total_wins'),
+                "totalPodiums": driver_race_dict.get('total_podiums'),
+                "bestResult": driver_race_dict.get('best_result'),
+                "noPoles": driver_quali_dict.get('total_poles'),
+                "bestQualiPos": driver_quali_dict.get('best_quali_pos'),
             }
             team_driver_list.append(temp)
 

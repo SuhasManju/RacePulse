@@ -166,7 +166,7 @@
               {{t.noPoles}}
           </td>
           <td class="px-6 py-4 font-medium text-gray-900">
-              {{t.bestQualiPos}}
+              {% if t.bestQualiPos %}{{t.bestQualiPos}}{% else %}-{% endif %}
           </td>
         </tr>
         {% endfor %}
