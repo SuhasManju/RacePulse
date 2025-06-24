@@ -80,6 +80,7 @@ class DriverDetailedView(View):
             "currentTeam": current_team.constructor.name,
             "noOfRaces": driver.total_race_starts,
             "driverImg": driver.driver_img,
+            "countryImg": driver.nationality_country.flag_img,
         }
         context_dict['driverData'] = driver_data
 

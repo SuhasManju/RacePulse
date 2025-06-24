@@ -139,6 +139,11 @@ class Country(models.Model):
         managed = False
         db_table = "country"
 
+    @cached_property
+    def flag_img(self):
+        country_code = self.alpha2_code.lower()
+        return f"https://flagcdn.com/{country_code}.svg"
+
 
 class Driver(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
