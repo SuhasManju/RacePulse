@@ -10,6 +10,9 @@
                     Id
                 </th>
                 <th scope="col" class="px-6 py-3">
+                    Position
+                </th>
+                <th scope="col" class="px-6 py-3">
                     Team
                 </th>
                 <th scope="col" class="px-6 py-3">
@@ -23,6 +26,9 @@
                 <th scope="row" class="px-6 py-4" hidden=true>
                     {{data.id}}
                 </th>
+                <td class="px-6 py-4 font-medium text-gray-900">
+                    {{forloop.counter}}
+                </td>
                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     <img src="{{data.teamImg}}" class="w-10 h-10 inline-block mr-2 rounded-full">
                     {{data.name}}
