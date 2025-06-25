@@ -11,5 +11,6 @@ urlpatterns = [
     path("circuits/", include("Circuit.urls")),
     path("search/", SearchView.as_view(), name="webSearch"),
     path("", HomeView.as_view(), name="home"),
+    path("<int:year>/", HomeView.as_view(), name="home"),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

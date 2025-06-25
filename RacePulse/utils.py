@@ -19,6 +19,20 @@ TEAM_COLOR_DICT = {
     "williams": "#1868DB",
 }
 
+random_colours = [
+    "#A0522D",  # Sienna
+    "#FFD700",  # Gold
+    "#6A0DAD",  # Purple
+    "#008080",  # Teal
+    "#DC143C",  # Crimson
+    "#4B0082",  # Indigo
+    "#FF1493",  # Deep Pink
+    "#8B4513",  # Saddle Brown
+    "#00CED1",  # Dark Turquoise
+    "#FF4500",  # Orange Red
+]
+
+
 # Wrapper function that puts every input a single dictionary for ease of use
 def CREATE_REQUEST(func):
     @wraps(func)
@@ -32,9 +46,11 @@ def CREATE_REQUEST(func):
 
         # We want user to see the data of current year
         # if user want to see data of previous year he can select from the dropdown
-        if not hasattr(request, "year"):
-            year = kwargs.get("year") or 2025
-            request.year = year
+        year = kwargs.get("year") or request.session.get(
+            "year") or settings.CURRENT_YEAR
+        request.session['year'] = year
+
+        request.year = request.session['year']
 
         return func(view_self, request, *args, **kwargs)
 

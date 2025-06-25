@@ -5,7 +5,7 @@
     
     <!-- Logo -->
     <div class="flex items-center">
-      <a href="/">
+      <a href="/{{request.year}}">
         <img src="{% static 'main_img.png' %}" alt="F1Stats Logo" class="h-14 w-auto">
       </a>
     </div>
@@ -34,23 +34,41 @@
       </div>
     </div>
     
-    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">2025<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+  <div class="relative inline-block text-left">
+    <!-- Dropdown Button -->
+    <button id="dropdownButton" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" type="button">
+        {{request.year}}
+        <svg class="w-2.5 h-2.5 ms-3 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4 4-4"/>
         </svg>
-        </button>
-        
-        <!-- Dropdown menu -->
-        <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
-            <ul class="py-2 text-sm text-gray-700" aria-labelledby={{request.year}}>
-            <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">2025</a>
-            </li>
-            <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">2024</a>
-            </li>
-            </ul>
-        </div>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div id="dropdownMenu" class="hidden absolute mt-2 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+        <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownButton">
+            <li><a href="/2025/" class="block px-4 py-2 hover:bg-gray-100">2025</a></li>
+            <li><a href="/2024/" class="block px-4 py-2 hover:bg-gray-100">2024</a></li>
+        </ul>
+    </div>
+    </div>
     
-    
-  </div>
+</div>
 </header>
+
+
+<!-- Script to toggle dropdown -->
+<script>
+    const dropdownButton = document.getElementById('dropdownButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    dropdownButton.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    // Optional: close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+</script>

@@ -69,6 +69,7 @@ class HomeView(View):
     @CREATE_REQUEST
     def get(self, request, *args, **kwargs):
         context_dict = {}
+        year = request.TLPOST.get("year", settings.CURRENT_YEAR)
 
         current_time = timezone.now()
         latest_race_pk = RaceData.objects.order_by(
@@ -80,12 +81,12 @@ class HomeView(View):
                 "position_number", "driver__name", "constructor__name", "race_gap")[:3]
 
         driver_standing_qs = SeasonDriverStanding.objects.filter(
-            year_id=settings.CURRENT_YEAR).order_by("position_number").select_related("driver")
+            year_id=year).order_by("position_number").select_related("driver")
         team_standing_qs = SeasonConstructorStanding.objects.filter(
-            year_id=settings.CURRENT_YEAR).order_by("position_number").select_related("constructor")
+            year_id=year).order_by("position_number").select_related("constructor")
 
         race_qs = Race.objects.filter(
-            year_id=settings.CURRENT_YEAR).select_related("circuit").order_by("pk")
+            year_id=year).select_related("circuit").order_by("pk")
 
         last_race_result = []
         for position, driver_name, team_name, race_gap in latest_result_qs:

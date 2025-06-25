@@ -4,11 +4,11 @@ from django.http import JsonResponse
 from RacePulse.utils import CREATE_REQUEST, CREATE_REQUEST_POST
 from Race.models import *
 import pandas as pd
-from RacePulse.utils import TEAM_COLOR_DICT, smart_format
+from RacePulse.utils import TEAM_COLOR_DICT, smart_format, random_colours
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-
+import random
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CurrentStandingView(View):
@@ -84,7 +84,9 @@ class CurrentStandingView(View):
                 'race__grand_prix__abbreviation', 'c_points']].values.tolist()
             driver_info = df[df['driver_id'] == driver_id].iloc[0].to_dict()
 
-            driver_color = TEAM_COLOR_DICT.get(driver_info['constructor_id'])
+            driver_color = TEAM_COLOR_DICT.get(
+                driver_info['constructor_id']) or random.choice(random_colours)
+
             if driver_info['constructor_id'] in already_visited_team:
                 driver_color = invert_hex_color(driver_color)
             already_visited_team.add(driver_info['constructor_id'])
