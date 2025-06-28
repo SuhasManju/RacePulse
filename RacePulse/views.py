@@ -75,11 +75,6 @@ class HomeView(View):
         latest_race_pk = RaceData.objects.order_by(
             '-race_id').values_list('race_id', flat=True).first()
 
-        latest_result_qs = RaceData.objects.filter(race_id=latest_race_pk,
-                                                   type=RaceData.RACE_RESULT).order_by(
-            OrderBy(F("position_number"), nulls_last=True)).values_list(
-                "position_number", "driver__name", "constructor__name", "race_gap")[:3]
-
         driver_standing_qs = SeasonDriverStanding.objects.filter(
             year_id=year).order_by("position_number").select_related("driver")
         team_standing_qs = SeasonConstructorStanding.objects.filter(
@@ -88,15 +83,21 @@ class HomeView(View):
         race_qs = Race.objects.filter(
             year_id=year).select_related("circuit").order_by("pk")
 
+
         last_race_result = []
-        for position, driver_name, team_name, race_gap in latest_result_qs:
-            temp = {
-                "position": position,
-                "driverName": driver_name,
-                "teamName": team_name,
-                "gap": race_gap,
-            }
-            last_race_result.append(temp)
+        if year == settings.CURRENT_YEAR:
+            latest_result_qs = RaceData.objects.filter(race_id=latest_race_pk,
+                                                       type=RaceData.RACE_RESULT).order_by(
+                OrderBy(F("position_number"), nulls_last=True)).values_list(
+                    "position_number", "driver__name", "constructor__name", "race_gap")[:3]
+            for position, driver_name, team_name, race_gap in latest_result_qs:
+                temp = {
+                    "position": position,
+                    "driverName": driver_name,
+                    "teamName": team_name,
+                    "gap": race_gap,
+                }
+                last_race_result.append(temp)
 
         races_list = []
         next_race = {}
@@ -129,7 +130,9 @@ class HomeView(View):
         context_dict['raceData'] = races_list
         context_dict['nextRace'] = next_race
 
-        last_race['standings'] = last_race_result
+        if last_race_result:
+            last_race['standings'] = last_race_result
+
         context_dict['lastRaceResult'] = last_race
 
         driver_standing_list = []

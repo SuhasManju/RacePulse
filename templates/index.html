@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if lastRaceResult %}
 <div class="flex w-full mt-4"> <!-- Horizontal split -->
     <!-- Left section -->
     <div class="w-1/2 p-4">
@@ -46,7 +47,7 @@
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-3xl text-gray-700">Next Race</h1>
             <button class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600">
-                <a href="race/{{nextRace.year}}/{{nextRace.round}}/">View Timings</a>
+                <a href="/race/{{nextRace.year}}/{{nextRace.round}}/">View Timings</a>
             </button>
         </div>
 
@@ -59,6 +60,7 @@
     </div>
 
 </div>
+{% endif %}
 
 <div class="flex w-full mt-4">
     <div class="w-1/2 p-4">
@@ -84,7 +86,7 @@
                         <td class="px-4 py-2">{{ forloop.counter }}</td>
                         <td class="px-4 py-2">
                             <a href=/drivers/{{driver.pk}}/>
-                                <img src="{{driver.img}}" class="w-auto h-9 inline-block rounded-3xl mr-1.5" />
+                                <img src="{{driver.img}}" class="w-auto h-9 inline-block rounded-3xl mr-1.5" onerror="this.style.display='none';"/>
                                 {{ driver.name }}
                             </a>
                         </td>
@@ -121,7 +123,7 @@
                         <td class="px-4 py-2">{{ forloop.counter }}</td>
                         <td class="px-4 py-2">
                             <a href="/team/{{team.pk}}">
-                                <img src="{{team.img}}" class="w-auto h-9 inline-block" />
+                                <img src="{{team.img}}" class="w-auto h-9 inline-block" onerror="this.style.display='none';"/>
                                 {{ team.name }}
                             </a>
                         </td>
