@@ -85,7 +85,7 @@ class CurrentStandingView(View):
             driver_info = df[df['driver_id'] == driver_id].iloc[0].to_dict()
 
             driver_color = TEAM_COLOR_DICT.get(
-                driver_info['constructor_id']) or random.choice(random_colours)
+                driver_info['constructor_id'], random.choice(random_colours))
 
             if driver_info['constructor_id'] in already_visited_team:
                 driver_color = invert_hex_color(driver_color)
@@ -121,7 +121,7 @@ class CurrentStandingView(View):
                 'teamName': team_info['constructor__name'],
                 'points': smart_format(points),
                 'pointsCumSum': team_points_list,
-                'color': TEAM_COLOR_DICT.get(constructor_id)
+                'color': TEAM_COLOR_DICT.get(constructor_id, random.choice(random_colours))
             }
             constructor_data.append(i)
 

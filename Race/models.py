@@ -379,6 +379,12 @@ class Race(models.Model):
         fp1_date = self.free_practice_1_date
         race_date = self.date
 
+        if not fp1_date and not race_date:
+            return
+
+        if not fp1_date:
+            return f"{race_date.strftime('%b')} {race_date.day} {race_date.year}"
+
         if fp1_date.month == race_date.month:
             # Same month: May 12–14 2025
             return f"{fp1_date.strftime('%b')} {fp1_date.day} – {race_date.day} {race_date.year}"

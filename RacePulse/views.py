@@ -102,31 +102,32 @@ class HomeView(View):
         races_list = []
         next_race = {}
         last_race = {}
-        for race in race_qs:
-            temp = {
-                "round": race.round,
-                "name": race.official_name,
-                "co_ordinates": race.circuit.cor_ordinates,
-                "date": race.event_date,
-            }
-
-            if not next_race and race.race_time > current_time:
-                next_race = {
-                    "name": race.official_name,
-                    "nextEvent": race.next_event[0],
-                    "nextEventType": race.next_event[1],
+        if year == settings.CURRENT_YEAR:
+            for race in race_qs:
+                temp = {
                     "round": race.round,
-                    "year": race.year_id,
+                    "name": race.official_name,
+                    "co_ordinates": race.circuit.cor_ordinates,
+                    "date": race.event_date,
                 }
 
-            if latest_race_pk == race.pk:
-                last_race = {
-                    "round": race.round,
-                    "year": race.year_id,
-                    "name": race.official_name,
-                }
+                if not next_race and race.race_time > current_time:
+                    next_race = {
+                        "name": race.official_name,
+                        "nextEvent": race.next_event[0],
+                        "nextEventType": race.next_event[1],
+                        "round": race.round,
+                        "year": race.year_id,
+                    }
 
-            races_list.append(temp)
+                if latest_race_pk == race.pk:
+                    last_race = {
+                        "round": race.round,
+                        "year": race.year_id,
+                        "name": race.official_name,
+                    }
+
+                races_list.append(temp)
         context_dict['raceData'] = races_list
         context_dict['nextRace'] = next_race
 
