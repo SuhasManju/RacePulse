@@ -9,6 +9,7 @@ urlpatterns = [
     path("team/", include("Team.urls")),
     path("drivers/", include("Drivers.urls")),
     path("circuits/", include("Circuit.urls")),
+    path("comparision/", include("Comparision.urls")),
     path("search/", SearchView.as_view(), name="webSearch"),
     path("", HomeView.as_view(), name="home"),
     path("<int:year>/", HomeView.as_view(), name="home"),

@@ -42,7 +42,12 @@ def CREATE_REQUEST(func):
             request.TLPOST[key] = item
 
         for key in request.GET:
-            request.TLPOST[key] = request.GET.get(key)
+            ans_list = request.GET.getlist(key)
+            ans = request.GET.get(key)
+            if len(ans_list) <= 1:
+                request.TLPOST[key] = ans
+            else:
+                request.TLPOST[key] = ans_list
 
         # We want user to see the data of current year
         # if user want to see data of previous year he can select from the dropdown
@@ -120,3 +125,18 @@ def invert_hex_color(hex_color: str) -> str:
 def retrive_latest_race_pk():
     from Race.models import RaceData
     return RaceData.objects.last().race_id
+
+
+def retrive_driver_list(year: int):
+    from Race.models import SeasonDriver
+    driver_list = SeasonDriver.objects.filter(
+        year_id=year).values_list("driver_id", "driver__name")
+    return list(driver_list)
+
+
+def retrive_team_list(year: int):
+    from Race.models import SeasonConstructor
+
+    team_list = SeasonConstructor.objects.filter(
+        year_id=year).values_list("constructor_id", "constructor__name")
+    return list(team_list)

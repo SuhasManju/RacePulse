@@ -17,7 +17,23 @@
       <a href="/team/{{request.year}}/" class="text-gray-700 hover:text-gray-900 text-sm font-medium">Teams</a>
       <a href="/drivers/{{request.year}}/" class="text-gray-700 hover:text-gray-900 text-sm font-medium">Drivers</a>
       <a href="/circuits/{{request.year}}/" class="text-gray-700 hover:text-gray-900 text-sm font-medium">Circuits</a>
-      <a href="#" class="text-gray-700 hover:text-gray-900 text-sm font-medium">Comparision</a>
+      <div class="relative group inline-block">
+        <p
+          class="text-gray-700 hover:text-gray-900 text-sm font-medium">
+          Comparison
+        </p>
+
+        <!-- Dropdown -->
+        <div class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition duration-200 z-50">
+          <a href="/comparision/driver/{{request.year}}/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            Driver Comparison
+          </a>
+          <a href="/comparision/team/{{request.year}}/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            Team Comparison
+          </a>
+        </div>
+      </div>
+  
     </nav>
 
     <div class="relative text-gray-600">
