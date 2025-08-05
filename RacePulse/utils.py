@@ -128,9 +128,9 @@ def retrive_latest_race_pk():
 
 
 def retrive_driver_list(year: int):
-    from Race.models import SeasonDriver
-    driver_list = SeasonDriver.objects.filter(
-        year_id=year).values_list("driver_id", "driver__name")
+    from Race.models import SeasonEntrantDriver
+    driver_list = SeasonEntrantDriver.objects.filter(
+        year_id=year, rounds__gt=0).values_list("driver_id", "driver__name")
     return list(driver_list)
 
 

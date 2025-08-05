@@ -5,7 +5,63 @@
 {% endblock title %}
 
 {% block content %}
+<div class="mx-auto mt-10 p-6 bg-white">
+    <form method="GET" class="space-y-6" id='compareForm'>
 
+        <!-- Driver selection dropdowns -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="driver1" class="block text-sm font-medium text-gray-700">Select Driver 1</label>
+                <select name="driver1" id="driver1" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    <option value="">-- Select Driver 1 --</option>
+                    {% for driver_id, driver_name in driverList %}
+                        <option value="{{ driver_id }}">{{ driver_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <div>
+                <label for="driver2" class="block text-sm font-medium text-gray-700">Select Driver 2</label>
+                <select name="driver2" id="driver2" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    <option value="">-- Select Driver 2 --</option>
+                    {% for driver_id, driver_name in driverList %}
+                        <option value="{{ driver_id }}">{{ driver_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Compare button -->
+        <div class="pt-4 flex justify-center">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded max-w-xs">
+                Compare
+            </button>
+        </div>
+
+    </form>
+</div>
+
+{{ request.year|json_script:"year" }}
+
+<script>
+
+    document.getElementById('compareForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const driver1 = document.getElementById('driver1').value;
+        const driver2 = document.getElementById('driver2').value;
+        const year = JSON.parse(document.getElementById("year").textContent);
+
+        // Removed the premature return statement
+
+        if (!driver1 || !driver2 || driver1 === driver2) {
+            alert("Please select two different drivers.");
+            return;
+        }
+
+        const url = `/comparision/driver/${year}/${driver1}-vs-${driver2}/`;
+        window.location.href = url;
+    });
+</script>
 
 {% endblock content %}
