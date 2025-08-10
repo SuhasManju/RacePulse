@@ -1,11 +1,136 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Teams Comparision
+    Team Comparision
 {% endblock title %}
 
 {% block content %}
 
+<div class="mx-auto mt-10 p-6 bg-white">
+    <form method="GET" class="space-y-6" id='compareForm'>
 
+        <!-- Team selection dropdowns -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="team1" class="block text-sm font-medium text-gray-700">Select Team 1</label>
+                <select name="team1" id="team1" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    <option value="">-- Select Team 1 --</option>
+                    {% for team_id, team_name in teamList %}
+                        <option value="{{ team_id }}" {% if team_id == request.TLPOST.team1Id %}selected{% endif %}>
+                            {{ team_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="team2" class="block text-sm font-medium text-gray-700">Select Team 2</label>
+                <select name="team2" id="team2" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    <option value="">-- Select Team 2 --</option>
+                    {% for team_id, team_name in teamList %}
+                        <option value="{{ team_id }}" {% if team_id == request.TLPOST.team2Id %}selected{% endif %}>
+                            {{ team_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Compare button -->
+        <div class="pt-4 flex justify-center">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded max-w-xs">
+                Compare
+            </button>
+        </div>
+
+    </form>
+</div>
+
+{% if team2Name %}
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full table-auto text-sm text-center text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900">Statistic</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900">{{ team1Name }}</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900">{{ team2Name }}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Wins</td>
+                    <td class="py-3 px-4">{{ team1Data.raceWins }}</td>
+                    <td class="py-3 px-4">{{ team2Data.raceWins }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Podiums</td>
+                    <td class="py-3 px-4">{{ team1Data.racePodiums }}</td>
+                    <td class="py-3 px-4">{{ team2Data.racePodiums }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">DNF</td>
+                    <td class="py-3 px-4">{{ team1Data.raceDnf }}</td>
+                    <td class="py-3 px-4">{{ team2Data.raceDnf }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Poles</td>
+                    <td class="py-3 px-4">{{ team1Data.qualiPoles }}</td>
+                    <td class="py-3 px-4">{{ team2Data.qualiPoles }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Wins</td>
+                    <td class="py-3 px-4">{{ team1Data.sprintWins }}</td>
+                    <td class="py-3 px-4">{{ team2Data.sprintWins }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Podiums</td>
+                    <td class="py-3 px-4">{{ team1Data.sprintPodiums }}</td>
+                    <td class="py-3 px-4">{{ team2Data.sprintPodiums }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint DNF</td>
+                    <td class="py-3 px-4">{{ team1Data.sprintDnf }}</td>
+                    <td class="py-3 px-4">{{ team2Data.sprintDnf }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Poles</td>
+                    <td class="py-3 px-4">{{ team1Data.sprintQualiPoles }}</td>
+                    <td class="py-3 px-4">{{ team2Data.sprintQualiPoles }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+{% endif %}
+
+{{ request.year|json_script:"year" }}
+
+<script>
+    document.getElementById('compareForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const team1 = document.getElementById('team1').value;
+        const team2 = document.getElementById('team2').value;
+        const year = JSON.parse(document.getElementById("year").textContent);
+
+        if (!team1 || !team2 || team1 === team2) {
+            alert("Please select two different drivers.");
+            return;
+        }
+
+        const url = `/comparision/team/${year}/${team1}-vs-${team2}/`;
+        window.location.href = url;
+    });
+</script>
 
 {% endblock content %}

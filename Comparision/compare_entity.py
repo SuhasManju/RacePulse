@@ -103,6 +103,7 @@ class CompareDriver:
 
 
 class CompareTeam(CompareDriver):
+
     def make_qs(self):
         qs = Q(race__year_id=self.year)
         qs &= Q(type__in=[RaceData.RACE_RESULT, RaceData.SPRINT_QUALIFYING_RESULT,

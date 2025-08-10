@@ -47,7 +47,7 @@
 
 {{ request.year|json_script:"year" }}
 
-{% if resultAvailable %}
+{% if driver1Name %}
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full table-auto text-sm text-center text-gray-500">
@@ -138,15 +138,12 @@
 {% endif %}
 
 <script>
-
     document.getElementById('compareForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
         const driver1 = document.getElementById('driver1').value;
         const driver2 = document.getElementById('driver2').value;
         const year = JSON.parse(document.getElementById("year").textContent);
-
-        // Removed the premature return statement
 
         if (!driver1 || !driver2 || driver1 === driver2) {
             alert("Please select two different drivers.");

@@ -8,4 +8,6 @@ urlpatterns = [
          name="DriverComparision"),
     path("team/<int:year>/", TeamComparisionView.as_view(),
          name="TeamComparision"),
+    path("team/<int:year>/<str:team1Id>-vs-<str:team2Id>/", TeamComparisionView.as_view(),
+         name="DriverComparision"),
 ]
