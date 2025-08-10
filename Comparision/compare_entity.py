@@ -9,7 +9,7 @@ class CompareDriver:
     COLUMNS = ["type", "position_number", "constructor_id",
                "driver_id", "race_id", "race_points"]
 
-    def __init__(self, year: int = settings.CURRENT_YEAR, driver_list: list = None):
+    def __init__(self, driver_list, year: int = settings.CURRENT_YEAR):
         self.driver_list = driver_list
         self.year = year
 
@@ -41,9 +41,11 @@ class CompareDriver:
             "sprintRace": sprint_race[driver1][0],
             "sprintDnf": sprint_race[driver1][1],
             "sprintWins": sprint_race[driver1][2],
+            "sprintPodiums": sprint_race[driver1][3],
             "race": race[driver1][0],
             "raceDnf": race[driver1][1],
             "raceWins": race[driver1][2],
+            "racePodiums": race[driver1][3],
         }
 
         driver2_dict = {
@@ -54,9 +56,11 @@ class CompareDriver:
             "sprintRace": sprint_race[driver2][0],
             "sprintDnf": sprint_race[driver2][1],
             "sprintWins": sprint_race[driver2][2],
+            "sprintPodiums": sprint_race[driver2][3],
             "race": race[driver2][0],
             "raceDnf": race[driver2][1],
             "raceWins": race[driver2][2],
+            "racePodiums": race[driver2][3],
         }
 
         return {"noOfRaces": len(common_races), driver1: driver1_dict, driver2: driver2_dict}
@@ -86,14 +90,16 @@ class CompareDriver:
 
         merged = pd.merge(race1, race2, on='race_id')
 
-        d1_vs_d2 = (merged['pos1'] < merged['pos2']).sum()
-        d2_vs_d1 = (merged['pos2'] < merged['pos1']).sum()
-        d1_dnf = (merged['pos1'] == 0).sum()
-        d2_dnf = (merged['pos2'] == 0).sum()
-        d1_wins = (merged['pos1'] == 1).sum()
-        d2_wins = (merged['pos2'] == 1).sum()
+        d1_vs_d2 = int((merged['pos1'] < merged['pos2']).sum())
+        d2_vs_d1 = int((merged['pos2'] < merged['pos1']).sum())
+        d1_dnf = int((merged['pos1'] == 0).sum())
+        d2_dnf = int((merged['pos2'] == 0).sum())
+        d1_wins = int((merged['pos1'] == 1).sum())
+        d2_wins = int((merged['pos2'] == 1).sum())
+        d1_podiums = int(((merged['pos1'] <= 3) & (merged['pos1'] > 0)).sum())
+        d2_podiums = int(((merged['pos2'] <= 3) & (merged['pos2'] > 0)).sum())
 
-        return {driver1: [d1_vs_d2, d1_dnf, d1_wins], driver2: [d2_vs_d1, d2_dnf, d2_wins]}
+        return {driver1: [d1_vs_d2, d1_dnf, d1_wins, d1_podiums], driver2: [d2_vs_d1, d2_dnf, d2_wins, d2_podiums]}
 
 
 class CompareTeam(CompareDriver):
@@ -107,7 +113,6 @@ class CompareTeam(CompareDriver):
 
         df = pd.DataFrame(result, columns=self.COLUMNS)
         df = df.replace(np.nan, 0)
-        print(df.empty)
 
         # Droping driver column and replacing it constrcutor with driver to reuse the above code
         df = df.drop("driver_id", axis=1)

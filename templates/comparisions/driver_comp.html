@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Drivers Comparision
+{% if driver1Name %}{{driver1Name}} v/s {{driver2Name}}  {% else %} Drivers Comparision {% endif %}
 {% endblock title %}
 
 {% block content %}
@@ -15,7 +15,9 @@
                 <select name="driver1" id="driver1" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                     <option value="">-- Select Driver 1 --</option>
                     {% for driver_id, driver_name in driverList %}
-                        <option value="{{ driver_id }}">{{ driver_name }}</option>
+                        <option value="{{ driver_id }}" {% if driver_id == request.TLPOST.driver1Id %}selected{% endif %}>
+                            {{ driver_name }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
@@ -25,7 +27,9 @@
                 <select name="driver2" id="driver2" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                     <option value="">-- Select Driver 2 --</option>
                     {% for driver_id, driver_name in driverList %}
-                        <option value="{{ driver_id }}">{{ driver_name }}</option>
+                        <option value="{{ driver_id }}" {% if driver_id == request.TLPOST.driver2Id %}selected{% endif %}>
+                            {{ driver_name }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
@@ -42,6 +46,96 @@
 </div>
 
 {{ request.year|json_script:"year" }}
+
+{% if resultAvailable %}
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full table-auto text-sm text-center text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900">Statistic</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900">{{ driver1Name }}</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-gray-900">{{ driver2Name }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Races</td>
+                    <td class="py-3 px-4">{{ driver1Data.race }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.race }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Wins</td>
+                    <td class="py-3 px-4">{{ driver1Data.raceWins }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.raceWins }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Podiums</td>
+                    <td class="py-3 px-4">{{ driver1Data.racePodiums }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.racePodiums }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">DNF</td>
+                    <td class="py-3 px-4">{{ driver1Data.raceDnf }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.raceDnf }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Qualifying</td>
+                    <td class="py-3 px-4">{{ driver1Data.quali }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.quali }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Poles</td>
+                    <td class="py-3 px-4">{{ driver1Data.qualiPoles }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.qualiPoles }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Race</td>
+                    <td class="py-3 px-4">{{ driver1Data.sprintRace }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.sprintRace }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Wins</td>
+                    <td class="py-3 px-4">{{ driver1Data.sprintWins }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.sprintWins }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Podiums</td>
+                    <td class="py-3 px-4">{{ driver1Data.sprintPodiums }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.sprintPodiums }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint DNF</td>
+                    <td class="py-3 px-4">{{ driver1Data.sprintDnf }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.sprintDnf }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Qualifying</td>
+                    <td class="py-3 px-4">{{ driver1Data.sprintQuali }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.sprintQuali }}</td>
+                </tr>
+
+                <tr class=" hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium text-gray-900">Sprint Poles</td>
+                    <td class="py-3 px-4">{{ driver1Data.sprintQualiPoles }}</td>
+                    <td class="py-3 px-4">{{ driver2Data.sprintQualiPoles }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+{% endif %}
 
 <script>
 
