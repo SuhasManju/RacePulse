@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Team Comparision
+    {% if team1Name %}{{team1Name}} v/s {{team2Name}}{% else %} Team Comparision {% endif %}
 {% endblock title %}
 
 {% block content %}

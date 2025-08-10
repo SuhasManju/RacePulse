@@ -119,3 +119,24 @@ class CompareTeam(CompareDriver):
         df = df.drop("driver_id", axis=1)
         df = df.rename(columns={"constructor_id": "driver_id"})
         return df
+
+    # overiding since dataframe does cartisean product when we merge it without any unique key
+    def head_vs_head(self, df, race_type):
+        df = df[df['type'] == race_type]
+
+        team1 = self.driver_list[0]
+        team2 = self.driver_list[1]
+
+        race1 = df[df['driver_id'] == team1][['race_id', 'position_number']].rename(
+            columns={"position_number": "pos1"})
+        race2 = df[df['driver_id'] == team2][['race_id', 'position_number']].rename(
+            columns={"position_number": "pos2"})
+
+        d1_dnf = int((race1['pos1'] == 0).sum())
+        d2_dnf = int((race2['pos2'] == 0).sum())
+        d1_wins = int((race1['pos1'] == 1).sum())
+        d2_wins = int((race2['pos2'] == 1).sum())
+        d1_podiums = int(((race1['pos1'] <= 3) & (race1['pos1'] > 0)).sum())
+        d2_podiums = int(((race2['pos2'] <= 3) & (race2['pos2'] > 0)).sum())
+
+        return {team1: ["-", d1_dnf, d1_wins, d1_podiums], team2: ["-", d2_dnf, d2_wins, d2_podiums]}
