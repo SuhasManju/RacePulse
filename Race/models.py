@@ -11,6 +11,8 @@ from django.templatetags.static import static
 from functools import cached_property
 
 class Chassis(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     constructor = models.ForeignKey("Constructor", models.DO_NOTHING)
     name = models.CharField(max_length=100)
@@ -22,6 +24,8 @@ class Chassis(models.Model):
 
 
 class Circuit(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
     full_name = models.CharField(max_length=100)
@@ -40,6 +44,7 @@ class Circuit(models.Model):
         managed = False
         db_table = "circuit"
 
+
     @cached_property
     def circuit_image(self):
         return static(f"circuit_img/{self.pk}.avif")
@@ -54,6 +59,8 @@ class Circuit(models.Model):
 
 
 class Constructor(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
     full_name = models.CharField(max_length=100)
@@ -96,6 +103,8 @@ class Constructor(models.Model):
 
 
 class ConstructorChronology(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("constructor_id", "position_display_order")
     constructor = models.ForeignKey(Constructor, models.DO_NOTHING)
     position_display_order = models.IntegerField()
@@ -117,6 +126,8 @@ class ConstructorChronology(models.Model):
 
 
 class Continent(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     code = models.CharField(unique=True, max_length=2)
     name = models.CharField(unique=True, max_length=100)
@@ -128,6 +139,8 @@ class Continent(models.Model):
 
 
 class Country(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     alpha2_code = models.CharField(unique=True, max_length=2)
     alpha3_code = models.CharField(unique=True, max_length=3)
@@ -146,6 +159,8 @@ class Country(models.Model):
 
 
 class Driver(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
@@ -198,6 +213,8 @@ class Driver(models.Model):
 
 
 class DriverFamilyRelationship(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("driver_id", "position_display_order")
     driver = models.ForeignKey(Driver, models.DO_NOTHING)
     position_display_order = models.IntegerField()
@@ -224,6 +241,8 @@ class DriverFamilyRelationship(models.Model):
 
 
 class Engine(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     engine_manufacturer = models.ForeignKey("EngineManufacturer", models.DO_NOTHING)
     name = models.CharField(max_length=100)
@@ -240,6 +259,8 @@ class Engine(models.Model):
 
 
 class EngineManufacturer(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, models.DO_NOTHING)
@@ -264,6 +285,8 @@ class EngineManufacturer(models.Model):
 
 
 class Entrant(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
 
@@ -273,6 +296,8 @@ class Entrant(models.Model):
 
 
 class GrandPrix(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
     full_name = models.CharField(max_length=100)
@@ -287,6 +312,8 @@ class GrandPrix(models.Model):
 
 
 class Race(models.Model):
+    f1_db = True
+
     id = models.IntegerField(primary_key=True)
     year = models.ForeignKey("Season", models.DO_NOTHING, db_column="year")
     round = models.IntegerField()
@@ -428,6 +455,8 @@ class Race(models.Model):
 
 
 class RaceConstructorStanding(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("race_id", "position_display_order")
     race = models.ForeignKey(Race, models.DO_NOTHING)
     position_display_order = models.IntegerField()
@@ -445,6 +474,7 @@ class RaceConstructorStanding(models.Model):
 
 
 class RaceData(models.Model):
+    f1_db = True
 
     # Types model choices
     DRIVER_OF_THE_DAY_RESULT = 'DRIVER_OF_THE_DAY_RESULT'
@@ -560,6 +590,8 @@ class RaceData(models.Model):
 
 
 class RaceDriverStanding(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("race_id", "position_display_order")
     race = models.ForeignKey(Race, models.DO_NOTHING)
     position_display_order = models.IntegerField()
@@ -576,6 +608,8 @@ class RaceDriverStanding(models.Model):
 
 
 class Season(models.Model):
+    f1_db = True
+
     year = models.IntegerField(primary_key=True)
 
     class Meta:
@@ -584,6 +618,8 @@ class Season(models.Model):
 
 
 class SeasonConstructor(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "constructor_id")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     constructor = models.ForeignKey(Constructor, models.DO_NOTHING)
@@ -609,6 +645,8 @@ class SeasonConstructor(models.Model):
 
 
 class SeasonConstructorStanding(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "position_display_order")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     position_display_order = models.IntegerField()
@@ -625,6 +663,8 @@ class SeasonConstructorStanding(models.Model):
 
 
 class SeasonDriver(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "driver_id")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     driver = models.ForeignKey(Driver, models.DO_NOTHING)
@@ -650,6 +690,8 @@ class SeasonDriver(models.Model):
 
 
 class SeasonDriverStanding(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "position_display_order")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     position_display_order = models.IntegerField()
@@ -665,6 +707,8 @@ class SeasonDriverStanding(models.Model):
 
 
 class SeasonEngineManufacturer(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "engine_manufacturer_id")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     engine_manufacturer = models.ForeignKey(EngineManufacturer, models.DO_NOTHING)
@@ -689,6 +733,8 @@ class SeasonEngineManufacturer(models.Model):
 
 
 class SeasonEntrant(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "entrant_id")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     entrant = models.ForeignKey(Entrant, models.DO_NOTHING)
@@ -701,6 +747,8 @@ class SeasonEntrant(models.Model):
 
 
 class SeasonEntrantChassis(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey(
         "year", "entrant_id", "constructor_id", "engine_manufacturer_id", "chassis_id"
     )
@@ -723,6 +771,8 @@ class SeasonEntrantChassis(models.Model):
 
 
 class SeasonEntrantConstructor(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey(
         "year", "entrant_id", "constructor_id", "engine_manufacturer_id"
     )
@@ -738,6 +788,8 @@ class SeasonEntrantConstructor(models.Model):
 
 
 class SeasonEntrantDriver(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey(
         "year", "entrant_id", "constructor_id", "engine_manufacturer_id", "driver_id"
     )
@@ -759,6 +811,8 @@ class SeasonEntrantDriver(models.Model):
 
 
 class SeasonEntrantEngine(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey(
         "year", "entrant_id", "constructor_id", "engine_manufacturer_id", "engine_id"
     )
@@ -777,6 +831,8 @@ class SeasonEntrantEngine(models.Model):
 
 
 class SeasonEntrantTyreManufacturer(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey(
         "year",
         "entrant_id",
@@ -805,6 +861,8 @@ class SeasonEntrantTyreManufacturer(models.Model):
 
 
 class SeasonTyreManufacturer(models.Model):
+    f1_db = True
+
     pk = models.CompositePrimaryKey("year", "tyre_manufacturer_id")
     year = models.ForeignKey(Season, models.DO_NOTHING, db_column="year")
     tyre_manufacturer = models.ForeignKey("TyreManufacturer", models.DO_NOTHING)
@@ -826,6 +884,8 @@ class SeasonTyreManufacturer(models.Model):
 
 
 class TyreManufacturer(models.Model):
+    f1_db = True
+
     id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, models.DO_NOTHING)

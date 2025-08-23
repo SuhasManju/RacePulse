@@ -84,12 +84,19 @@ WSGI_APPLICATION = "RacePulse.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+    "f1_db": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "formula1_new",
         "PASSWORD": "root",
         "USER": "root",
+    },
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "formula1",
+        "PASSWORD": "root",
+        "USER": "postgres",
     }
+
 }
 
 
@@ -122,6 +129,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+DATABASE_ROUTERS = ["RacePulse.db_router.DatabaseRouter"]
 
 
 # Static files (CSS, JavaScript, Images)
