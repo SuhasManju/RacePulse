@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.sitemaps',
     "Race",
     "RacePulse",
     "Team",
@@ -150,3 +151,5 @@ STATICFILES_DIRS = [
 TAILWIND_APP_NAME = 'theme'
 
 CURRENT_YEAR = 2025
+
+MIN_YEAR = 2024

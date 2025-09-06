@@ -1,6 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.sitemaps.views import sitemap, index
 from RacePulse.views import SearchView, HomeView
+from Team.sitemaps import RaceSiteMap
+
+
+sitemaps = {
+    "races": RaceSiteMap,
+}
 
 urlpatterns = [
     path("e@am!nat!0n/", admin.site.urls),
@@ -14,4 +21,10 @@ urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path("<int:year>/", HomeView.as_view(), name="home"),
     path("__reload__/", include("django_browser_reload.urls")),
+
+    # SiteMap Urls
+    path('sitemap.xml', index, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.index'),
+    path('sitemap-<section>.xml', sitemap,
+         {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]

@@ -140,3 +140,14 @@ def retrive_team_list(year: int):
     team_list = SeasonConstructor.objects.filter(
         year_id=year).values_list("constructor_id", "constructor__name")
     return list(team_list)
+
+
+def batch_qs(qs, batch_size=200):
+    start = 0
+    while True:
+        stop = start + batch_size
+        batch = qs[start:stop]
+        if not batch:
+            break
+        yield batch
+        start = stop
