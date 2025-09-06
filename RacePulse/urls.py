@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap, index
 from RacePulse.views import SearchView, HomeView
-from Team.sitemaps import RaceSiteMap
+from Team.sitemaps import TeamSiteMap
+from Drivers.sitemaps import DriverSiteMap
 
 
 sitemaps = {
-    "races": RaceSiteMap,
+    "teams": TeamSiteMap,
+    "drivers": DriverSiteMap,
 }
 
 urlpatterns = [

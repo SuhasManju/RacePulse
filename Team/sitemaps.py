@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.conf import settings
 
 
-class RaceSiteMap(Sitemap):
+class TeamSiteMap(Sitemap):
 
     def __init__(self):
         super().__init__()
