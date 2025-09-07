@@ -6,12 +6,16 @@ from RacePulse.views import SearchView, HomeView
 from Team.sitemaps import TeamSiteMap
 from Drivers.sitemaps import DriverSiteMap
 from Circuit.sitemaps import CircuitSiteMap
+from Standing.sitemaps import StandingSiteMap
+from Comparision.sitemaps import ComparisionSiteMap
 
 
 sitemaps = {
     "teams": TeamSiteMap,
     "drivers": DriverSiteMap,
     "circuits": CircuitSiteMap,
+    "standings": StandingSiteMap,
+    "comparisons": ComparisionSiteMap,
 }
 
 urlpatterns = [
