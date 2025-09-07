@@ -55,7 +55,7 @@
         </thead>
         <tbody>
             {% for data in races %}
-            <tr class="bg-white hover:bg-gray-50" onclick="window.location.href='/race/{{request.TLPOST.year}}/{{data.raceNo}}/';">
+            <tr class="bg-white hover:bg-gray-50" onclick="window.location.href='{{data.raceURL}}';">
                 <th scope="row" class="px-6 py-4" hidden=true>
                     {{data.id}}
                 </th>

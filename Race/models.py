@@ -9,6 +9,8 @@ from django.db import models
 from RacePulse.utils import *
 from django.templatetags.static import static
 from functools import cached_property
+from django.urls import reverse
+from slugify import slugify
 
 class Chassis(models.Model):
     f1_db = True
@@ -452,6 +454,10 @@ class Race(models.Model):
                 next_event = event
                 break
         return next_event
+
+    @cached_property
+    def race_url(self):
+        return reverse("race_result", kwargs={"year": self.year_id, "round": self.round, "name": slugify(self.grand_prix.full_name)})
 
 
 class RaceConstructorStanding(models.Model):

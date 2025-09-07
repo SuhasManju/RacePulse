@@ -16,7 +16,8 @@ class RaceView(View):
         context_dict = {}
         table_data = []
         year = request.TLPOST.get("year")
-        races = list(Race.objects.filter(year=year).order_by("round"))
+        races = list(Race.objects.filter(year=year).order_by(
+            "round").select_related("grand_prix"))
 
         if not races:
             pass
@@ -29,8 +30,10 @@ class RaceView(View):
                 "raceNo": race.round,
                 "raceDate": race.event_date,
                 "isSprint": race.is_sprint,
+                "raceURL": race.race_url,
             }
             table_data.append(res)
+
         context_dict["races"] = table_data
         if self.API_RESPONSE:
             return JsonResponse(table_data)
