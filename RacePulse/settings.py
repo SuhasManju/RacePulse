@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "Race",
     "RacePulse",
     "Team",
+    "live_data",
     "Standing",
     "tailwind",
     "theme",

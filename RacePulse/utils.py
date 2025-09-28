@@ -4,6 +4,7 @@ from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 import json
 from django.conf import settings
+import pandas as pd
 
 
 TEAM_COLOR_DICT = {
@@ -151,3 +152,15 @@ def batch_qs(qs, batch_size=200):
             break
         yield batch
         start = stop
+
+
+def convert_timedelta_time(td):
+    if pd.isna(td):
+        return None
+    return (td+timezone.now()).time()
+
+
+def check_pd_na(td):
+    if pd.isna(td):
+        return None
+    return td
